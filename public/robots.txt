@@ -1,0 +1,7 @@
+# robots.txt for 퇴근시간 계산기
+
+User-agent: *
+Disallow: /
+
+# Sitemap (크롤링 차단 시 불필요하지만 유지)
+# Sitemap: https://jeong-hyun-lee.github.io/sitemap.xml

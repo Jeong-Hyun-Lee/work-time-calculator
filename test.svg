@@ -1,0 +1,132 @@
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<defs>
+			<linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+				<stop offset="0%" style="stop-color: #ffffff; stop-opacity: 1" />
+				<stop offset="100%" style="stop-color: #ffffff; stop-opacity: 0.95" />
+			</linearGradient>
+		</defs>
+
+		<!-- 시계 외곽 링 -->
+		<circle
+			cx="12"
+			cy="12"
+			r="10"
+			fill="none"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			opacity="0.3"
+		/>
+		<circle
+			cx="12"
+			cy="12"
+			r="9"
+			fill="none"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			opacity="0.9"
+		/>
+
+		<!-- 시계 숫자 표시 (12, 3, 6, 9) -->
+		<line
+			x1="12"
+			y1="4"
+			x2="12"
+			y2="5.5"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			stroke-linecap="round"
+		/>
+		<line
+			x1="20"
+			y1="12"
+			x2="18.5"
+			y2="12"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			stroke-linecap="round"
+		/>
+		<line
+			x1="12"
+			y1="20"
+			x2="12"
+			y2="18.5"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			stroke-linecap="round"
+		/>
+		<line
+			x1="4"
+			y1="12"
+			x2="5.5"
+			y2="12"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			stroke-linecap="round"
+		/>
+
+		<!-- 작은 눈금 -->
+		<g opacity="0.6">
+			<line
+				x1="12"
+				y1="3"
+				x2="12"
+				y2="4"
+				stroke="url(#headerGrad)"
+				stroke-width="1"
+				stroke-linecap="round"
+			/>
+			<line
+				x1="21"
+				y1="12"
+				x2="20"
+				y2="12"
+				stroke="url(#headerGrad)"
+				stroke-width="1"
+				stroke-linecap="round"
+			/>
+			<line
+				x1="12"
+				y1="21"
+				x2="12"
+				y2="20"
+				stroke="url(#headerGrad)"
+				stroke-width="1"
+				stroke-linecap="round"
+			/>
+			<line
+				x1="3"
+				y1="12"
+				x2="4"
+				y2="12"
+				stroke="url(#headerGrad)"
+				stroke-width="1"
+				stroke-linecap="round"
+			/>
+		</g>
+
+		<!-- 시계 중심 -->
+		<circle cx="12" cy="12" r="0.94" fill="url(#headerGrad)" />
+		<circle cx="12" cy="12" r="0.56" fill="currentColor" />
+
+		<!-- 시침 (9시 방향 - 출근 시간 표현) -->
+		<line
+			x1="12"
+			y1="12"
+			x2="9"
+			y2="12"
+			stroke="url(#headerGrad)"
+			stroke-width="1.5"
+			stroke-linecap="round"
+		/>
+
+		<!-- 분침 (12시 방향) -->
+		<line
+			x1="12"
+			y1="12"
+			x2="12"
+			y2="7.125"
+			stroke="url(#headerGrad)"
+			stroke-width="1"
+			stroke-linecap="round"
+		/>
+	</svg>
