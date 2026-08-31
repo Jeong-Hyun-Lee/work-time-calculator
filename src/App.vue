@@ -4,6 +4,7 @@ import LottoWidget from './components/widgets/LottoWidget.vue'
 import QuoteWidget from './components/widgets/QuoteWidget.vue'
 import LunchRouletteWidget from './components/widgets/LunchRouletteWidget.vue'
 import LadderWidget from './components/widgets/LadderWidget.vue'
+import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.vue'
 </script>
 
 <template>
@@ -20,6 +21,9 @@ import LadderWidget from './components/widgets/LadderWidget.vue'
 		</div>
 		<div class="widget--md">
 			<LadderWidget />
+		</div>
+		<div class="widget--md">
+			<SalaryCalculatorWidget />
 		</div>
 	</div>
 </template>
