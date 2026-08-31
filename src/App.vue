@@ -2,6 +2,7 @@
 import TimeCalculator from './components/TimeCalculator.vue'
 import LottoWidget from './components/widgets/LottoWidget.vue'
 import QuoteWidget from './components/widgets/QuoteWidget.vue'
+import LunchRouletteWidget from './components/widgets/LunchRouletteWidget.vue'
 </script>
 
 <template>
@@ -12,6 +13,9 @@ import QuoteWidget from './components/widgets/QuoteWidget.vue'
 		</div>
 		<div class="widget--sm">
 			<QuoteWidget />
+		</div>
+		<div class="widget--sm">
+			<LunchRouletteWidget />
 		</div>
 	</div>
 </template>
