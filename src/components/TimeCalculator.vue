@@ -114,26 +114,20 @@ onUnmounted(() => {
 
 <style scoped>
 .time-calculator {
-	height: 100vh;
 	display: flex;
-	align-items: center;
 	justify-content: center;
 	background: var(--color-canvas);
 	padding: var(--spacing-16);
-	overflow: hidden;
 }
 
 .container {
-	overflow: auto;
 	background: var(--color-paper);
 	border: 1px solid var(--color-hairline);
 	border-radius: var(--radius-card);
 	padding: var(--spacing-20);
 	box-shadow: var(--shadow-card);
 	max-width: 1000px;
-	width: calc(100% - 2rem);
-	height: calc(100vh - 2rem);
-	max-height: calc(100vh - 2rem);
+	width: 100%;
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
@@ -151,10 +145,6 @@ onUnmounted(() => {
 	}
 }
 
-::-webkit-scrollbar {
-	width: 0;
-}
-
 @media (max-width: 768px) {
 	.time-calculator {
 		padding: var(--spacing-16);
@@ -162,9 +152,6 @@ onUnmounted(() => {
 
 	.container {
 		padding: var(--spacing-20);
-		width: calc(100% - 2rem);
-		height: calc(100vh - 2rem);
-		max-height: calc(100vh - 2rem);
 	}
 }
 
@@ -176,9 +163,6 @@ onUnmounted(() => {
 	.container {
 		padding: var(--spacing-16);
 		border-radius: 20px;
-		width: calc(100% - 1.5rem);
-		height: calc(100vh - 1.5rem);
-		max-height: calc(100vh - 1.5rem);
 	}
 }
 </style>
