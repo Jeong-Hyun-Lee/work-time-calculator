@@ -90,7 +90,7 @@ const handleHalfDayChange = (event) => {
 
 <style scoped>
 .input-section {
-	margin-bottom: 1.5rem;
+	margin-bottom: var(--spacing-24);
 	flex-shrink: 0;
 }
 
@@ -98,17 +98,16 @@ const handleHalfDayChange = (event) => {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 0.75rem;
+	margin-bottom: var(--spacing-12);
 }
 
 .input-section label {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
-	color: var(--theme-text, #374151);
+	gap: var(--spacing-8);
+	color: var(--color-ink);
 	font-weight: 600;
-	font-size: 1rem;
-	transition: color 0.3s ease;
+	font-size: var(--text-body-lg);
 }
 
 .label-icon {
@@ -122,28 +121,27 @@ const handleHalfDayChange = (event) => {
 
 .input-section input[type='time'] {
 	width: 100%;
-	padding: 1rem 1.25rem;
-	font-size: 1.1rem;
-	border: 2px solid #e5e7eb;
-	border-radius: 16px;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	background: var(--theme-input-bg, #f9fafb);
+	padding: var(--spacing-8) var(--spacing-12);
+	font-size: var(--text-body-lg);
+	border: 1px solid transparent;
+	border-radius: var(--radius-control);
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease;
+	background: var(--color-canvas);
 	font-weight: 600;
-	color: var(--theme-text, #1a1a2e);
+	color: var(--color-ink);
 	cursor: pointer;
 }
 
 .input-section input[type='time']:hover {
-	border-color: #d1d5db;
-	background: var(--theme-input-bg-hover, #ffffff);
+	background: var(--color-surface-alt);
 }
 
 .input-section input[type='time']:focus {
 	outline: none;
-	border-color: var(--theme-primary, #667eea);
-	background: var(--theme-input-bg-focus, #ffffff);
-	box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-	transform: translateY(-2px);
+	border-color: var(--color-hairline);
+	background: var(--color-paper);
 }
 
 .halfday-checkbox-section {
@@ -153,27 +151,26 @@ const handleHalfDayChange = (event) => {
 .halfday-label {
 	display: flex;
 	align-items: center;
-	gap: 0.75rem;
+	gap: var(--spacing-12);
 	cursor: pointer;
 	user-select: none;
-	color: var(--theme-text, #374151);
+	color: var(--color-ink);
 	font-weight: 600;
-	font-size: 1rem;
-	transition: color 0.3s ease;
+	font-size: var(--text-body);
 }
 
 .halfday-label:hover {
-	color: var(--theme-primary, #667eea);
+	color: var(--color-mid-gray);
 }
 
 .halfday-checkbox {
 	width: 20px;
 	height: 20px;
 	cursor: pointer;
-	accent-color: var(--theme-primary, #667eea);
+	accent-color: var(--color-ink);
 }
 
 .checkbox-label-text {
-	font-size: 1rem;
+	font-size: var(--text-body);
 }
 </style>
