@@ -1,6 +1,7 @@
 <script setup>
 import TimeCalculator from './components/TimeCalculator.vue'
 import LottoWidget from './components/widgets/LottoWidget.vue'
+import QuoteWidget from './components/widgets/QuoteWidget.vue'
 </script>
 
 <template>
@@ -8,6 +9,9 @@ import LottoWidget from './components/widgets/LottoWidget.vue'
 	<div class="widget-grid">
 		<div class="widget--md">
 			<LottoWidget />
+		</div>
+		<div class="widget--sm">
+			<QuoteWidget />
 		</div>
 	</div>
 </template>
