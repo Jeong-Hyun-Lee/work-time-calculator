@@ -165,7 +165,7 @@ const props = defineProps({
 .countdown-label {
 	font-size: var(--text-caption);
 	margin-bottom: var(--spacing-16);
-	color: var(--color-mid-gray);
+	color: var(--color-ink-inverse-soft);
 	font-weight: 500;
 	letter-spacing: 0.05em;
 	text-transform: uppercase;
@@ -196,7 +196,7 @@ const props = defineProps({
 
 .unit {
 	font-size: var(--text-caption);
-	color: var(--color-mid-gray);
+	color: var(--color-ink-inverse-soft);
 	font-weight: 500;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
@@ -205,7 +205,7 @@ const props = defineProps({
 .separator {
 	font-size: 2rem;
 	font-weight: 300;
-	color: var(--color-mid-gray);
+	color: var(--color-ink-inverse-soft);
 	margin: 0 0.25rem;
 }
 
