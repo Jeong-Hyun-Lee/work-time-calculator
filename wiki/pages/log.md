@@ -18,3 +18,8 @@ Updated: widget-hub-brainstorm.md.
 로또/오늘의 한마디/점심 메뉴 룰렛/사다리타기/연봉 실수령액 계산기 5개 위젯 구현 완료.
 overview.md의 GitHub Pages/Actions 배포 서술을 Cloudflare Pages로 갱신 (드리프트 해소).
 Updated: overview.md, README.md, architecture.md.
+
+## [2026-09-01] lint | architecture.md 잔여 드리프트 정리
+architecture.md에 위젯 허브 섹션을 추가하던 중, `redesign/mono-ui`에서 삭제된 `ElectricEffects.vue`/`GokuSilhouette.vue`/`ThemeSelector.vue`/`useTheme.js`가 그대로 남아있던 것을 발견 — 해당 브랜치 작업 때 architecture.md가 갱신 대상에서 빠졌던 게 원인. 목록에서 제거하고 Note를 현재 상태로 재작성.
+README.md의 "프로젝트 구조" 섹션은 여전히 테마 시스템(ThemeSelector.vue/useTheme.js/7종 테마)을 문서화하고 있고 위젯 허브 파일도 누락돼 있음 — 이번 범위 밖이라 후속 작업으로 남김.
+Updated: architecture.md.

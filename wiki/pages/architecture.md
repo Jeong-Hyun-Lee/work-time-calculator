@@ -8,9 +8,6 @@ updated: 2026-09-01
 ## Components (`src/components/`)
 - `AppHeader.vue`
 - `CountdownDisplay.vue`
-- `ElectricEffects.vue`
-- `GokuSilhouette.vue`
-- `ThemeSelector.vue`
 - `TimeCalculator.vue`
 - `TimeInfoCards.vue`
 - `TimeInput.vue`
@@ -19,7 +16,6 @@ updated: 2026-09-01
 ## Composables (`src/composables/`)
 - `useNotification.js`
 - `useSEO.js`
-- `useTheme.js`
 - `useTimeCalculation.js`
 
 ## Widget Hub (신규)
@@ -41,8 +37,8 @@ updated: 2026-09-01
 - `src/App.vue`, `src/main.js`
 
 ## Note
-README.md's "프로젝트 구조" section lists an older component set (missing `TimeCalculator.vue`, `ElectricEffects.vue`, `GokuSilhouette.vue`, `icons/`) — drift between that doc and the actual `src/` tree as of 2026-08-31.
+README.md's "프로젝트 구조" section is stale in both directions as of 2026-09-01: it still lists `ThemeSelector.vue`/`useTheme.js` and a 7-테마 기능(테마 시스템은 `redesign/mono-ui`에서 완전히 제거됨), and it's missing every 위젯 허브 파일(`WidgetHeader.vue`, `components/widgets/*`, 관련 composables, `data/*.json`). 이 문서(`architecture.md`)는 위 목록대로 실제 `src/` 트리와 일치하는 상태이며, README.md 쪽 정리는 별도 후속 작업으로 남아 있음.
 
 See [[overview]] for features and stack.
 
-Source: `src/**/*.{vue,js}` file listing (read 2026-08-31).
+Source: `src/**/*.{vue,js}` file listing (재확인 2026-09-01).
