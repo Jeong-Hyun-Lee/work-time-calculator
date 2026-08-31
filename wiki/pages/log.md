@@ -17,4 +17,4 @@ Updated: widget-hub-brainstorm.md.
 ## [2026-08-31] ingest | 위젯 허브 MVP 구현 및 Cloudflare 배포 문서화
 로또/오늘의 한마디/점심 메뉴 룰렛/사다리타기/연봉 실수령액 계산기 5개 위젯 구현 완료.
 overview.md의 GitHub Pages/Actions 배포 서술을 Cloudflare Pages로 갱신 (드리프트 해소).
-Updated: overview.md, README.md.
+Updated: overview.md, README.md, architecture.md.

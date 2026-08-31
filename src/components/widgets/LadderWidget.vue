@@ -6,11 +6,12 @@
 			class="ladder-input"
 			placeholder="참가자 이름을 줄바꿈 또는 쉼표로 구분해서 입력하세요 (2~10명)"
 			rows="3"
+			aria-label="참가자 이름"
 		></textarea>
 		<button type="button" class="btn-solid" @click="generate">결과 만들기</button>
-		<p v-if="error" class="ladder-error">{{ error }}</p>
+		<p v-if="error" class="ladder-error" role="alert">{{ error }}</p>
 		<ul v-if="results.length" class="ladder-results">
-			<li v-for="item in results" :key="item.name">
+			<li v-for="(item, index) in results" :key="index">
 				<span>{{ item.name }}</span>
 				<span class="ladder-arrow">→</span>
 				<span>{{ item.outcome }}</span>
@@ -42,7 +43,7 @@ const { namesInput, results, error, generate } = useLadder()
 
 .ladder-error {
 	font-size: var(--text-caption);
-	color: var(--color-mid-gray);
+	color: var(--color-ember);
 	margin-top: var(--spacing-8);
 }
 

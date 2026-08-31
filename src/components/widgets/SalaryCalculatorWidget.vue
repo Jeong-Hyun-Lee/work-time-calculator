@@ -8,6 +8,7 @@
 				min="0"
 				placeholder="세전 연봉 (만원)"
 				class="salary-input"
+				aria-label="세전 연봉 (만원)"
 				@keyup.enter="calculate"
 			/>
 			<button type="button" class="btn-solid" @click="calculate">계산하기</button>
@@ -27,7 +28,7 @@
 			</ul>
 		</div>
 		<p class="salary-disclaimer">
-			2026년 요율 기준 참고용 계산이며(부양가족·비과세액 미반영), 실제 급여와 다를 수 있습니다.
+			2026년 요율 기준 참고용 계산이며(부양가족·비과세액·근로소득세액공제 미반영, 간이세액표 아닌 누진세율 근사), 실제 급여와 다를 수 있습니다.
 		</p>
 	</div>
 </template>

@@ -1,6 +1,6 @@
 ---
 type: architecture
-updated: 2026-08-31
+updated: 2026-09-01
 ---
 
 # Architecture
@@ -21,6 +21,21 @@ updated: 2026-08-31
 - `useSEO.js`
 - `useTheme.js`
 - `useTimeCalculation.js`
+
+## Widget Hub (신규)
+- `src/components/WidgetHeader.vue` — widget card header (icon + title)
+- `src/components/widgets/LottoWidget.vue`
+- `src/components/widgets/QuoteWidget.vue`
+- `src/components/widgets/LunchRouletteWidget.vue`
+- `src/components/widgets/LadderWidget.vue`
+- `src/components/widgets/SalaryCalculatorWidget.vue`
+- `src/composables/useLotto.js`
+- `src/composables/useQuote.js`
+- `src/composables/useLunchRoulette.js`
+- `src/composables/useLadder.js`
+- `src/composables/useSalaryCalculator.js`
+- `src/data/quotes.json`
+- `src/data/lunchMenus.json`
 
 ## Entry
 - `src/App.vue`, `src/main.js`

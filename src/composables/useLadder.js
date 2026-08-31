@@ -1,5 +1,16 @@
 import { ref } from 'vue'
 
+function shuffleIndices(length) {
+	const indices = Array.from({ length }, (_, i) => i)
+	for (let i = indices.length - 1; i > 0; i--) {
+		const randomBuffer = new Uint32Array(1)
+		crypto.getRandomValues(randomBuffer)
+		const j = randomBuffer[0] % (i + 1)
+		;[indices[i], indices[j]] = [indices[j], indices[i]]
+	}
+	return indices
+}
+
 export function useLadder() {
 	const namesInput = ref('')
 	const results = ref([])
@@ -24,17 +35,14 @@ export function useLadder() {
 			return
 		}
 
-		const outcomes = [...participants]
-		for (let i = outcomes.length - 1; i > 0; i--) {
-			const randomBuffer = new Uint32Array(1)
-			crypto.getRandomValues(randomBuffer)
-			const j = randomBuffer[0] % (i + 1)
-			;[outcomes[i], outcomes[j]] = [outcomes[j], outcomes[i]]
-		}
+		let indices
+		do {
+			indices = shuffleIndices(participants.length)
+		} while (indices.some((value, i) => value === i))
 
 		results.value = participants.map((name, i) => ({
 			name,
-			outcome: outcomes[i],
+			outcome: participants[indices[i]],
 		}))
 	}
 
