@@ -13,6 +13,7 @@
 - 🔔 **알림 기능**: 정시 알림으로 퇴근 시간을 놓치지 않도록 도와줍니다
 - 📱 **반응형 디자인**: 모바일, 태블릿, 데스크톱 모든 기기에서 사용 가능
 - 💾 **로컬 스토리지**: 출근 시간과 설정이 자동으로 저장됩니다
+- 🧩 **위젯 허브**: 로또 번호 생성기, 오늘의 한마디, 점심 메뉴 룰렛, 사다리타기, 연봉 실수령액 계산기
 
 ## 🚀 시작하기
 
@@ -71,11 +72,27 @@ time-calc/
 │   │   ├── AppHeader.vue
 │   │   ├── TimeInput.vue
 │   │   ├── TimeInfoCards.vue
-│   │   └── CountdownDisplay.vue
+│   │   ├── CountdownDisplay.vue
+│   │   ├── TimeCalculator.vue
+│   │   ├── WidgetHeader.vue
+│   │   └── widgets/       # 위젯 허브
+│   │       ├── LottoWidget.vue
+│   │       ├── QuoteWidget.vue
+│   │       ├── LunchRouletteWidget.vue
+│   │       ├── LadderWidget.vue
+│   │       └── SalaryCalculatorWidget.vue
 │   ├── composables/     # 재사용 가능한 로직
 │   │   ├── useTimeCalculation.js
 │   │   ├── useNotification.js
-│   │   └── useSEO.js
+│   │   ├── useSEO.js
+│   │   ├── useLotto.js
+│   │   ├── useQuote.js
+│   │   ├── useLunchRoulette.js
+│   │   ├── useLadder.js
+│   │   └── useSalaryCalculator.js
+│   ├── data/             # 위젯 정적 데이터
+│   │   ├── quotes.json
+│   │   └── lunchMenus.json
 │   └── main.js
 ├── index.html
 └── vite.config.js
