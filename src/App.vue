@@ -1,10 +1,15 @@
 <script setup>
 import TimeCalculator from './components/TimeCalculator.vue'
+import LottoWidget from './components/widgets/LottoWidget.vue'
 </script>
 
 <template>
 	<TimeCalculator />
-	<div class="widget-grid"></div>
+	<div class="widget-grid">
+		<div class="widget--md">
+			<LottoWidget />
+		</div>
+	</div>
 </template>
 
 <style>
