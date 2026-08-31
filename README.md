@@ -83,13 +83,23 @@ time-calc/
 
 ## 📦 배포
 
-이 프로젝트는 GitHub Pages를 통해 자동으로 배포됩니다.
+이 프로젝트는 [Cloudflare Pages](https://pages.cloudflare.com/) 무료 티어로 배포합니다.
 
-### GitHub Actions를 통한 자동 배포
+### 최초 설정
 
-1. 코드를 `main` 브랜치에 push
-2. GitHub Actions가 자동으로 빌드 및 배포
-3. 배포 상태는 Repository의 Actions 탭에서 확인 가능
+1. [Cloudflare 대시보드](https://dash.cloudflare.com/) → Workers & Pages → Create → Pages → Connect to Git
+2. 이 GitHub 저장소 선택
+3. 빌드 설정:
+   - Framework preset: `Vite`
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+4. Save and Deploy
+
+### 이후 배포
+
+`main` 브랜치에 push할 때마다 Cloudflare Pages가 자동으로 빌드 및 배포합니다. 배포 상태는 Cloudflare 대시보드의 Pages 프로젝트에서 확인할 수 있습니다.
+
+서버리스 함수(Pages Functions)나 환경변수는 현재 사용하지 않습니다 — 모든 기능이 클라이언트에서만 동작하는 정적 사이트입니다.
 
 ## 🔧 개발 환경 설정
 
