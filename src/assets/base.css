@@ -1,86 +1,260 @@
-/* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
+	/* master 브랜치 "기본" 테마 팔레트 */
+	--color-primary: #667eea;
+	--color-secondary: #764ba2;
+	--color-canvas: #f5f6fb;
+	--color-page-gradient: linear-gradient(
+		135deg,
+		#667eea 0%,
+		#764ba2 50%,
+		#f093fb 100%
+	);
+	--color-paper: rgba(255, 255, 255, 0.95);
+	--color-surface-alt: #f9fafb;
+	--color-ink: #1a1a2e;
+	--color-ink-soft: #764ba2;
+	--color-mid-gray: #6b7280;
+	--color-hairline: rgba(26, 26, 46, 0.08);
+	--color-ember: #ef4444;
+	--color-ink-inverse-soft: rgba(255, 255, 255, 0.75);
 
-  --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
+	--color-accent: #667eea;
+	--color-accent-hover: #5a6fd6;
+	--color-accent-soft: rgba(102, 126, 234, 0.1);
+	--color-accent-gradient: linear-gradient(
+		135deg,
+		#667eea 0%,
+		#764ba2 100%
+	);
+	--color-tint-violet: rgba(118, 75, 162, 0.12);
+	--color-tint-amber: rgba(240, 147, 251, 0.14);
+	--color-tint-sky: rgba(102, 126, 234, 0.12);
 
-  --vt-c-indigo: #2c3e50;
+	--font-sans:
+		'Inter',
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		'Fira Sans',
+		'Droid Sans',
+		'Helvetica Neue',
+		sans-serif;
 
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
+	--text-caption: 12px;
+	--text-body: 14px;
+	--text-body-lg: 16px;
+	--text-subheading: 17px;
+	--text-heading-sm: 24px;
+	--text-heading: 30px;
+	--text-heading-lg: 36px;
+	--text-display: 48px;
 
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
+	--radius-small: 8px;
+	--radius-nested: 12px;
+	--radius-control: 16px;
+	--radius-card: 20px;
+
+	--spacing-4: 4px;
+	--spacing-8: 8px;
+	--spacing-12: 12px;
+	--spacing-16: 16px;
+	--spacing-20: 20px;
+	--spacing-24: 24px;
+	--spacing-48: 48px;
+
+	--shadow-card:
+		0 4px 16px rgba(102, 126, 234, 0.12),
+		0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+	--shadow-card-hover:
+		0 10px 30px rgba(102, 126, 234, 0.22),
+		0 0 0 1px rgba(255, 255, 255, 0.6) inset;
 }
 
-/* semantic color variables for this project */
-:root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
+.widget-card {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	width: 100%;
+	background: var(--color-paper);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
+	border: 1px solid var(--color-hairline);
+	border-radius: var(--radius-card);
+	box-shadow: var(--shadow-card);
+	padding: var(--spacing-20);
+	animation: cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
+@keyframes cardEnter {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
 
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
+.widget-card {
+	position: relative;
+	overflow: hidden;
+}
 
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
+.widget-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-card-hover);
+}
+
+.widget-card--dark {
+	background: var(--color-accent-gradient);
+	/* 투명 border를 두면 오버레이가 못 닿는 1px 띠가 드러나므로 아예 제거 */
+	border: none;
+	color: #ffffff;
+}
+
+.widget-card .widget-header-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: var(--radius-nested);
+	background: var(--color-surface-alt);
+	font-size: 0.95rem;
+}
+
+.widget-card.accent-violet .widget-header-icon {
+	background: var(--color-tint-violet);
+}
+
+.widget-card.accent-amber .widget-header-icon {
+	background: var(--color-tint-amber);
+}
+
+.widget-card.accent-sky .widget-header-icon {
+	background: var(--color-tint-sky);
+}
+
+.btn-solid {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--color-accent-gradient);
+	color: #ffffff;
+	border: none;
+	border-radius: var(--radius-control);
+	padding: var(--spacing-8) var(--spacing-16);
+	font-size: var(--text-body);
+	font-weight: 500;
+	font-family: var(--font-sans);
+	cursor: pointer;
+	transition:
+		background 0.2s ease,
+		transform 0.1s ease;
+}
+
+.btn-solid:hover {
+	filter: brightness(1.08);
+}
+
+.btn-solid:disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.btn-outline {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--color-paper);
+	color: var(--color-ink);
+	border: 1px solid var(--color-hairline);
+	border-radius: var(--radius-control);
+	padding: var(--spacing-8) var(--spacing-16);
+	font-size: var(--text-body);
+	font-weight: 500;
+	font-family: var(--font-sans);
+	cursor: pointer;
+	transition:
+		background 0.2s ease,
+		border-color 0.2s ease,
+		transform 0.1s ease;
+}
+
+.btn-outline:hover {
+	background: var(--color-surface-alt);
+	border-color: #d0d5dd;
+}
+
+.btn-outline-inverse {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba(255, 255, 255, 0.08);
+	color: var(--color-paper);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: var(--radius-control);
+	padding: var(--spacing-8) var(--spacing-16);
+	font-size: var(--text-body);
+	font-weight: 500;
+	font-family: var(--font-sans);
+	cursor: pointer;
+	transition:
+		background 0.2s ease,
+		transform 0.1s ease;
+}
+
+.btn-outline-inverse:hover {
+	background: rgba(255, 255, 255, 0.16);
+}
+
+.btn-outline-inverse:focus-visible {
+	outline: 2px solid var(--color-paper);
+	outline-offset: 2px;
+}
+
+.btn-solid:focus-visible,
+.btn-outline:focus-visible {
+	outline: 2px solid var(--color-accent);
+	outline-offset: 2px;
+}
+
+.btn-solid:active,
+.btn-outline:active,
+.btn-outline-inverse:active {
+	transform: scale(0.97);
 }
 
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
-  margin: 0;
-  font-weight: normal;
+	box-sizing: border-box;
+	margin: 0;
+	font-weight: normal;
+}
+
+html {
+	min-height: 100%;
+	background: var(--color-page-gradient);
+	background-repeat: no-repeat;
 }
 
 body {
-  min-height: 100vh;
-  color: var(--color-text);
-  background: var(--color-background);
-  transition:
-    color 0.5s,
-    background-color 0.5s;
-  line-height: 1.6;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Fira Sans',
-    'Droid Sans',
-    'Helvetica Neue',
-    sans-serif;
-  font-size: 15px;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	min-height: 100vh;
+	color: var(--color-ink);
+	background: transparent;
+	line-height: 1.6;
+	font-family: var(--font-sans);
+	font-size: var(--text-body);
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }

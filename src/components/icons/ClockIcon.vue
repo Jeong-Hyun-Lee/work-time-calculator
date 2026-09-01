@@ -1,19 +1,13 @@
 <template>
 	<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<defs>
-			<linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-				<stop offset="0%" style="stop-color: #ffffff; stop-opacity: 1" />
-				<stop offset="100%" style="stop-color: #ffffff; stop-opacity: 0.95" />
-			</linearGradient>
-		</defs>
-
 		<!-- 시계 외곽 링 -->
 		<circle
 			cx="12"
 			cy="12"
 			r="9.75"
 			fill="none"
-			stroke="rgba(255,255,255,0.3)"
+			stroke="currentColor"
+			stroke-opacity="0.3"
 			stroke-width="0.5"
 		/>
 		<circle
@@ -106,7 +100,6 @@
 
 		<!-- 시계 중심 -->
 		<circle cx="12" cy="12" r="1" fill="currentColor" />
-		<circle cx="12" cy="12" r="0.6" fill="url(#headerGrad)" />
 
 		<!-- 시침 (9시 방향 - 출근 시간 표현) -->
 		<line

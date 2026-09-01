@@ -21,9 +21,10 @@ Free web app: enter clock-in time, it calculates clock-out time automatically.
 - On-time notification
 - Responsive (mobile/tablet/desktop)
 - LocalStorage persistence for clock-in time and settings
+- Widget hub: 로또 번호 생성기, 오늘의 한마디, 점심 메뉴 룰렛, 사다리타기, 연봉 실수령액 계산기
 
 ## Deployment
-GitHub Pages, auto-deploy via GitHub Actions on push to `main`.
+Cloudflare Pages, auto-deploy on push to `main` 브랜치.
 
 See [[architecture]] for the current component/composable map.
 

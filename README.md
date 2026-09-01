@@ -10,10 +10,10 @@
 - 📊 **자동 퇴근 시간 계산**: 출근 시간을 입력하면 퇴근 시간을 자동으로 계산
 - 🕐 **하프데이 옵션**: 4시간/8시간 근무 선택 가능
 - ⏳ **실시간 카운트다운**: 퇴근까지 남은 시간을 실시간으로 표시
-- 🎨 **다양한 테마**: 기본, 다크, 오션, 포레스트, 선셋, 베지트, 브로리 테마 지원
 - 🔔 **알림 기능**: 정시 알림으로 퇴근 시간을 놓치지 않도록 도와줍니다
 - 📱 **반응형 디자인**: 모바일, 태블릿, 데스크톱 모든 기기에서 사용 가능
 - 💾 **로컬 스토리지**: 출근 시간과 설정이 자동으로 저장됩니다
+- 🧩 **위젯 허브**: 로또 번호 생성기, 오늘의 한마디, 점심 메뉴 룰렛, 사다리타기, 연봉 실수령액 계산기
 
 ## 🚀 시작하기
 
@@ -73,38 +73,50 @@ time-calc/
 │   │   ├── TimeInput.vue
 │   │   ├── TimeInfoCards.vue
 │   │   ├── CountdownDisplay.vue
-│   │   └── ThemeSelector.vue
+│   │   ├── TimeCalculator.vue
+│   │   ├── WidgetHeader.vue
+│   │   └── widgets/       # 위젯 허브
+│   │       ├── LottoWidget.vue
+│   │       ├── QuoteWidget.vue
+│   │       ├── LunchRouletteWidget.vue
+│   │       ├── LadderWidget.vue
+│   │       └── SalaryCalculatorWidget.vue
 │   ├── composables/     # 재사용 가능한 로직
 │   │   ├── useTimeCalculation.js
-│   │   ├── useTheme.js
 │   │   ├── useNotification.js
-│   │   └── useSEO.js
+│   │   ├── useSEO.js
+│   │   ├── useLotto.js
+│   │   ├── useQuote.js
+│   │   ├── useLunchRoulette.js
+│   │   ├── useLadder.js
+│   │   └── useSalaryCalculator.js
+│   ├── data/             # 위젯 정적 데이터
+│   │   ├── quotes.json
+│   │   └── lunchMenus.json
 │   └── main.js
 ├── index.html
 └── vite.config.js
 ```
 
-## 🎨 테마
-
-다음 테마들을 지원합니다:
-
-- 🎨 **기본** - 밝고 깔끔한 기본 테마
-- 🌙 **다크** - 눈의 피로를 줄이는 다크 테마
-- 🌊 **오션** - 시원한 파란색 계열
-- 🌲 **포레스트** - 자연스러운 초록색 계열
-- 🌅 **선셋** - 따뜻한 주황색 계열
-- 💙 **베지트** - 드래곤볼 테마 (베지트)
-- 💚 **브로리** - 드래곤볼 테마 (브로리)
-
 ## 📦 배포
 
-이 프로젝트는 GitHub Pages를 통해 자동으로 배포됩니다.
+이 프로젝트는 [Cloudflare Pages](https://pages.cloudflare.com/) 무료 티어로 배포합니다.
 
-### GitHub Actions를 통한 자동 배포
+### 최초 설정
 
-1. 코드를 `main` 브랜치에 push
-2. GitHub Actions가 자동으로 빌드 및 배포
-3. 배포 상태는 Repository의 Actions 탭에서 확인 가능
+1. [Cloudflare 대시보드](https://dash.cloudflare.com/) → Workers & Pages → Create → Pages → Connect to Git
+2. 이 GitHub 저장소 선택
+3. 빌드 설정:
+   - Framework preset: `Vite`
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+4. Save and Deploy
+
+### 이후 배포
+
+`main` 브랜치에 push할 때마다 Cloudflare Pages가 자동으로 빌드 및 배포합니다. 배포 상태는 Cloudflare 대시보드의 Pages 프로젝트에서 확인할 수 있습니다.
+
+서버리스 함수(Pages Functions)나 환경변수는 현재 사용하지 않습니다 — 모든 기능이 클라이언트에서만 동작하는 정적 사이트입니다.
 
 ## 🔧 개발 환경 설정
 
