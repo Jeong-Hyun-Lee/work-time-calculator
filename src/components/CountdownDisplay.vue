@@ -21,6 +21,9 @@
 					<span class="unit">초</span>
 				</span>
 			</div>
+			<div class="countdown-progress">
+				<div class="countdown-progress-fill" :style="{ width: progress + '%' }"></div>
+			</div>
 			<button
 				type="button"
 				class="copy-btn"
@@ -54,6 +57,9 @@
 					<span class="unit">초</span>
 				</span>
 			</div>
+			<div class="countdown-progress">
+				<div class="countdown-progress-fill" :style="{ width: '100%' }"></div>
+			</div>
 			<button
 				type="button"
 				class="copy-btn"
@@ -70,7 +76,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const justCopied = ref(false)
 let copyTimeout = null
@@ -138,6 +144,14 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+})
+
+const TOTAL_WORK_SECONDS = computed(() => (props.isHalfDay ? 4 * 3600 : 9 * 3600))
+
+const progress = computed(() => {
+	if (props.diffInSeconds <= 0) return 100
+	const elapsed = TOTAL_WORK_SECONDS.value - props.diffInSeconds
+	return Math.min(100, Math.max(0, (elapsed / TOTAL_WORK_SECONDS.value) * 100))
 })
 </script>
 
@@ -207,6 +221,23 @@ const props = defineProps({
 	font-weight: 300;
 	color: var(--color-ink-inverse-soft);
 	margin: 0 0.25rem;
+}
+
+.countdown-progress {
+	width: 100%;
+	height: 4px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.15);
+	overflow: hidden;
+	margin-top: var(--spacing-16);
+	margin-bottom: 2.75rem;
+}
+
+.countdown-progress-fill {
+	height: 100%;
+	background: var(--color-paper);
+	border-radius: 999px;
+	transition: width 1s linear;
 }
 
 .copy-btn {

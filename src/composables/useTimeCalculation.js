@@ -16,7 +16,7 @@ export function useTimeCalculation(startTime, isHalfDay) {
 	})
 
 	const formattedCurrentTime = computed(() => {
-		return currentTime.value.format('HH시 mm분 ss초')
+		return currentTime.value.format('HH시 mm분')
 	})
 
 	const formattedEndTime = computed(() => {
