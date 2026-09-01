@@ -1,6 +1,6 @@
 <template>
 	<div class="time-calculator">
-		<div class="container">
+		<div class="widget-card time-calculator-card">
 			<AppHeader />
 
 			<TimeInput
@@ -123,17 +123,11 @@ onUnmounted(() => {
 	padding: var(--spacing-16);
 }
 
-.container {
-	background: var(--color-paper);
-	border: 1px solid var(--color-hairline);
-	border-radius: var(--radius-card);
-	padding: var(--spacing-20);
-	box-shadow: var(--shadow-card);
+.time-calculator-card {
+	flex: none;
 	max-width: 1000px;
 	width: 100%;
 	margin: 0 auto;
-	display: flex;
-	flex-direction: column;
 	animation: slideUp 0.6s ease-out;
 }
 
@@ -152,20 +146,11 @@ onUnmounted(() => {
 	.time-calculator {
 		padding: var(--spacing-16);
 	}
-
-	.container {
-		padding: var(--spacing-20);
-	}
 }
 
 @media (max-width: 480px) {
 	.time-calculator {
 		padding: var(--spacing-12);
-	}
-
-	.container {
-		padding: var(--spacing-16);
-		border-radius: 20px;
 	}
 }
 </style>

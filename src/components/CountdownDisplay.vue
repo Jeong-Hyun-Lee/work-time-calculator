@@ -26,7 +26,7 @@
 			</div>
 			<button
 				type="button"
-				class="copy-btn"
+				class="btn-outline-inverse copy-btn"
 				:aria-label="copyLabel"
 				@click="copyRemainingTime"
 			>
@@ -62,7 +62,7 @@
 			</div>
 			<button
 				type="button"
-				class="copy-btn"
+				class="btn-outline-inverse copy-btn"
 				:aria-label="copyLabelOverdue"
 				@click="copyOverdueTime"
 			>
@@ -241,27 +241,10 @@ const progress = computed(() => {
 }
 
 .copy-btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 	gap: 0.35rem;
-	margin-top: var(--spacing-16);
-	padding: var(--spacing-8) var(--spacing-16);
-	font-size: var(--text-body);
-	font-weight: 500;
-	color: var(--color-paper);
-	background: transparent;
-	border: 1px solid var(--color-hairline);
-	border-radius: var(--radius-control);
-	cursor: pointer;
-	transition: background 0.2s;
 	position: absolute;
 	bottom: var(--spacing-16);
 	right: var(--spacing-16);
-}
-
-.copy-btn:hover {
-	background: rgba(255, 255, 255, 0.08);
 }
 
 .copy-icon {
