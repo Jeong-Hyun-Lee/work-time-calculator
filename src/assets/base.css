@@ -1,20 +1,34 @@
 :root {
-	--color-canvas: #f7f8fa;
-	--color-paper: #ffffff;
-	--color-surface-alt: #f2f4f7;
-	--color-ink: #101828;
-	--color-ink-soft: #1d2939;
-	--color-mid-gray: #667085;
-	--color-hairline: #e4e7ec;
-	--color-ember: #e7000b;
-	--color-ink-inverse-soft: #98a2b3;
+	/* master 브랜치 "기본" 테마 팔레트 */
+	--color-primary: #667eea;
+	--color-secondary: #764ba2;
+	--color-canvas: #f5f6fb;
+	--color-page-gradient: linear-gradient(
+		135deg,
+		#667eea 0%,
+		#764ba2 50%,
+		#f093fb 100%
+	);
+	--color-paper: rgba(255, 255, 255, 0.95);
+	--color-surface-alt: #f9fafb;
+	--color-ink: #1a1a2e;
+	--color-ink-soft: #764ba2;
+	--color-mid-gray: #6b7280;
+	--color-hairline: rgba(26, 26, 46, 0.08);
+	--color-ember: #ef4444;
+	--color-ink-inverse-soft: rgba(255, 255, 255, 0.75);
 
-	--color-accent: #6366f1;
-	--color-accent-hover: #4f46e5;
-	--color-accent-soft: #eef2ff;
-	--color-tint-violet: #ede9fe;
-	--color-tint-amber: #fef3c7;
-	--color-tint-sky: #e0f2fe;
+	--color-accent: #667eea;
+	--color-accent-hover: #5a6fd6;
+	--color-accent-soft: rgba(102, 126, 234, 0.1);
+	--color-accent-gradient: linear-gradient(
+		135deg,
+		#667eea 0%,
+		#764ba2 100%
+	);
+	--color-tint-violet: rgba(118, 75, 162, 0.12);
+	--color-tint-amber: rgba(240, 147, 251, 0.14);
+	--color-tint-sky: rgba(102, 126, 234, 0.12);
 
 	--font-sans:
 		'Inter',
@@ -39,10 +53,10 @@
 	--text-heading-lg: 36px;
 	--text-display: 48px;
 
-	--radius-small: 6px;
-	--radius-nested: 8px;
-	--radius-control: 10px;
-	--radius-card: 14px;
+	--radius-small: 8px;
+	--radius-nested: 12px;
+	--radius-control: 16px;
+	--radius-card: 20px;
 
 	--spacing-4: 4px;
 	--spacing-8: 8px;
@@ -53,11 +67,11 @@
 	--spacing-48: 48px;
 
 	--shadow-card:
-		0 1px 2px rgba(16, 24, 40, 0.04),
-		0 8px 24px -12px rgba(16, 24, 40, 0.12);
+		0 4px 16px rgba(102, 126, 234, 0.12),
+		0 0 0 1px rgba(255, 255, 255, 0.5) inset;
 	--shadow-card-hover:
-		0 2px 4px rgba(16, 24, 40, 0.06),
-		0 16px 32px -12px rgba(16, 24, 40, 0.18);
+		0 10px 30px rgba(102, 126, 234, 0.22),
+		0 0 0 1px rgba(255, 255, 255, 0.6) inset;
 }
 
 .widget-card {
@@ -66,6 +80,8 @@
 	flex: 1;
 	width: 100%;
 	background: var(--color-paper);
+	backdrop-filter: blur(20px);
+	-webkit-backdrop-filter: blur(20px);
 	border: 1px solid var(--color-hairline);
 	border-radius: var(--radius-card);
 	box-shadow: var(--shadow-card);
@@ -93,9 +109,9 @@
 }
 
 .widget-card--dark {
-	background: var(--color-ink-soft);
-	border-color: var(--color-ink-soft);
-	color: var(--color-paper);
+	background: var(--color-accent-gradient);
+	border-color: transparent;
+	color: #ffffff;
 }
 
 .widget-card .widget-header-icon {
@@ -125,7 +141,7 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	background: var(--color-accent);
+	background: var(--color-accent-gradient);
 	color: #ffffff;
 	border: none;
 	border-radius: var(--radius-control);
@@ -140,7 +156,7 @@
 }
 
 .btn-solid:hover {
-	background: var(--color-accent-hover);
+	filter: brightness(1.08);
 }
 
 .btn-solid:disabled {
@@ -219,10 +235,16 @@
 	font-weight: normal;
 }
 
+html {
+	min-height: 100%;
+	background: var(--color-page-gradient);
+	background-repeat: no-repeat;
+}
+
 body {
 	min-height: 100vh;
 	color: var(--color-ink);
-	background: var(--color-canvas);
+	background: transparent;
 	line-height: 1.6;
 	font-family: var(--font-sans);
 	font-size: var(--text-body);

@@ -25,7 +25,7 @@ import ClockIcon from './icons/ClockIcon.vue'
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-8);
-	border-bottom: 1px solid var(--color-hairline);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 	padding-bottom: var(--spacing-12);
 }
 
@@ -33,7 +33,7 @@ import ClockIcon from './icons/ClockIcon.vue'
 	display: flex;
 	width: 22px;
 	height: 22px;
-	color: var(--color-ink);
+	color: #ffffff;
 	flex-shrink: 0;
 }
 
@@ -46,13 +46,13 @@ h1 {
 	font-size: var(--text-subheading);
 	font-weight: 600;
 	letter-spacing: -0.02em;
-	color: var(--color-ink);
+	color: #ffffff;
 }
 
 .subtitle {
 	margin-left: auto;
 	font-size: var(--text-caption);
-	color: var(--color-mid-gray);
+	color: rgba(255, 255, 255, 0.8);
 }
 
 @media (max-width: 600px) {
