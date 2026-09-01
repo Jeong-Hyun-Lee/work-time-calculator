@@ -1,9 +1,9 @@
 <template>
-	<div class="input-section">
+	<div class="widget-card input-section">
 		<div class="input-section-header">
 			<label for="start-time">
 				<span class="label-icon">🕐</span>
-				출근 시간 입력
+				출근 시간
 			</label>
 		<div class="halfday-checkbox-section">
 			<label class="halfday-label">
@@ -111,8 +111,7 @@ const handleHalfDayChange = (event) => {
 
 <style scoped>
 .input-section {
-	margin-bottom: var(--spacing-24);
-	flex-shrink: 0;
+	justify-content: center;
 }
 
 .input-section-header {

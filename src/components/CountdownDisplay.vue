@@ -1,5 +1,5 @@
 <template>
-	<div class="countdown-section">
+	<div class="countdown-section widget-card widget-card--dark">
 		<div v-if="diffInSeconds > 0" class="countdown">
 			<div class="countdown-icon">⏳</div>
 			<div class="countdown-label">퇴근기모리장단까지 남은 시간</div>
@@ -157,16 +157,15 @@ const progress = computed(() => {
 
 <style scoped>
 .countdown-section {
-	margin-top: auto;
-	flex-shrink: 0;
+	justify-content: center;
 }
 
 .countdown {
-	background: var(--color-ink-soft);
-	padding: var(--spacing-24);
-	border-radius: var(--radius-card);
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	text-align: center;
-	color: var(--color-paper);
 	position: relative;
 }
 
@@ -230,7 +229,7 @@ const progress = computed(() => {
 	background: rgba(255, 255, 255, 0.25);
 	overflow: hidden;
 	margin-top: var(--spacing-16);
-	margin-bottom: 2.75rem;
+	margin-bottom: var(--spacing-16);
 }
 
 .countdown-progress-fill {
@@ -242,9 +241,7 @@ const progress = computed(() => {
 
 .copy-btn {
 	gap: 0.35rem;
-	position: absolute;
-	bottom: var(--spacing-16);
-	right: var(--spacing-16);
+	align-self: flex-end;
 }
 
 .copy-icon {

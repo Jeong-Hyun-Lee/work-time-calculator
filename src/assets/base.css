@@ -80,6 +80,12 @@
 	transform: translateY(-3px);
 }
 
+.widget-card--dark {
+	background: var(--color-ink-soft);
+	border-color: var(--color-ink-soft);
+	color: var(--color-paper);
+}
+
 .widget-card.confetti-yellow {
 	background: var(--color-sticker-yellow);
 }

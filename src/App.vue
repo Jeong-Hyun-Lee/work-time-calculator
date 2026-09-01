@@ -1,31 +1,146 @@
 <script setup>
-import TimeCalculator from './components/TimeCalculator.vue'
+import { onMounted, onUnmounted } from 'vue'
+import { useStorage, useWebNotification } from '@vueuse/core'
+import AppHeader from './components/AppHeader.vue'
+import TimeInput from './components/TimeInput.vue'
+import StatTile from './components/StatTile.vue'
+import CountdownDisplay from './components/CountdownDisplay.vue'
 import LottoWidget from './components/widgets/LottoWidget.vue'
 import QuoteWidget from './components/widgets/QuoteWidget.vue'
 import LunchRouletteWidget from './components/widgets/LunchRouletteWidget.vue'
 import LadderWidget from './components/widgets/LadderWidget.vue'
 import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.vue'
+import { useTimeCalculation } from './composables/useTimeCalculation'
+import {
+	registerServiceWorker,
+	useHourlyNotification,
+} from './composables/useNotification'
+
+const startTime = useStorage('startTime', '09:55')
+const isHalfDay = useStorage('isHalfDay', false)
+
+const {
+	diffInSeconds,
+	formattedStartTime,
+	formattedCurrentTime,
+	formattedEndTime,
+	hours,
+	minutes,
+	remainingSeconds,
+	overdueHours,
+	overdueMins,
+	overdueSecs,
+	calculateTime,
+} = useTimeCalculation(startTime, isHalfDay)
+
+// 첫 렌더에 diffInSeconds 기본값(0)으로 "야근 시간 경과"가 잠깐 보이는 것 방지
+calculateTime()
+
+const { checkHourlyNotification, resetNotifiedHours } = useHourlyNotification(
+	hours,
+	minutes,
+	remainingSeconds,
+	diffInSeconds,
+)
+
+// useWebNotification을 사용하여 권한 확인
+const notification = useWebNotification({
+	title: '퇴근시간 계산기',
+	body: '',
+})
+
+let intervalId = null
+
+// 출근 시간 변경 핸들러
+const handleStartTimeChange = () => {
+	// 출근 시간이 변경되면 알림 추적 초기화
+	resetNotifiedHours()
+	calculateTime()
+}
+
+// 시간 계산 및 알림 체크를 함께 수행
+const calculateTimeWithNotification = () => {
+	calculateTime()
+	checkHourlyNotification()
+}
+
+onMounted(async () => {
+	// Service Worker 등록
+	await registerServiceWorker()
+
+	// useWebNotification을 사용하여 권한 요청
+	if (notification.isSupported.value && !notification.permissionGranted.value) {
+		if ('Notification' in window && Notification.permission === 'default') {
+			await Notification.requestPermission()
+		}
+	}
+
+	calculateTimeWithNotification()
+	intervalId = setInterval(() => {
+		calculateTimeWithNotification()
+	}, 1000)
+})
+
+onUnmounted(() => {
+	if (intervalId) {
+		clearInterval(intervalId)
+	}
+})
 </script>
 
 <template>
-	<TimeCalculator />
-	<div class="widget-grid">
-		<div class="widget--sm">
+	<AppHeader />
+
+	<main class="tile-grid">
+		<div class="tile tile--4">
+			<TimeInput
+				v-model="startTime"
+				v-model:isHalfDay="isHalfDay"
+				@change="handleStartTimeChange"
+			/>
+		</div>
+
+		<div class="tile tile--8">
+			<CountdownDisplay
+				:diff-in-seconds="diffInSeconds"
+				:hours="hours"
+				:minutes="minutes"
+				:remaining-seconds="remainingSeconds"
+				:overdue-hours="overdueHours"
+				:overdue-mins="overdueMins"
+				:overdue-secs="overdueSecs"
+				:is-half-day="isHalfDay"
+			/>
+		</div>
+
+		<div class="tile tile--2">
+			<StatTile label="출근 시간" :value="formattedStartTime" />
+		</div>
+		<div class="tile tile--2">
+			<StatTile label="현재 시간" :value="formattedCurrentTime" />
+		</div>
+		<div class="tile tile--2">
+			<StatTile label="퇴근 시간" :value="formattedEndTime" dark />
+		</div>
+
+		<div class="tile tile--6">
 			<LottoWidget />
 		</div>
-		<div class="widget--sm">
+
+		<div class="tile tile--4">
 			<QuoteWidget />
 		</div>
-		<div class="widget--sm">
+		<div class="tile tile--4">
 			<LunchRouletteWidget />
 		</div>
-		<div class="widget--md">
+		<div class="tile tile--4">
 			<LadderWidget />
 		</div>
-		<div class="widget--md">
+
+		<div class="tile tile--12">
 			<SalaryCalculatorWidget />
 		</div>
-	</div>
+	</main>
 </template>
 
 <style>
@@ -35,51 +150,89 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 	box-sizing: border-box;
 }
 
-.widget-grid {
+.tile-grid {
 	display: grid;
 	grid-template-columns: repeat(12, 1fr);
-	gap: var(--spacing-16);
+	gap: var(--spacing-12);
 	max-width: 1280px;
 	margin: 0 auto;
-	padding: var(--spacing-24) var(--spacing-16);
+	padding: 0 var(--spacing-16) var(--spacing-48);
 }
 
-.widget--sm {
+.tile {
+	display: flex;
+	flex-direction: column;
+}
+
+.tile--2 {
+	grid-column: span 2;
+}
+
+.tile--4 {
 	grid-column: span 4;
-	display: flex;
-	flex-direction: column;
 }
 
-.widget--md {
+.tile--6 {
 	grid-column: span 6;
-	display: flex;
-	flex-direction: column;
 }
 
-@media (max-width: 768px) {
-	.widget--sm,
-	.widget--md {
-		grid-column: span 12;
+.tile--8 {
+	grid-column: span 8;
+}
+
+.tile--12 {
+	grid-column: span 12;
+}
+
+.tile:nth-child(1) .widget-card {
+	animation-delay: 0s;
+}
+.tile:nth-child(2) .widget-card {
+	animation-delay: 0.05s;
+}
+.tile:nth-child(3) .widget-card {
+	animation-delay: 0.1s;
+}
+.tile:nth-child(4) .widget-card {
+	animation-delay: 0.13s;
+}
+.tile:nth-child(5) .widget-card {
+	animation-delay: 0.16s;
+}
+.tile:nth-child(6) .widget-card {
+	animation-delay: 0.2s;
+}
+.tile:nth-child(7) .widget-card {
+	animation-delay: 0.24s;
+}
+.tile:nth-child(8) .widget-card {
+	animation-delay: 0.28s;
+}
+.tile:nth-child(9) .widget-card {
+	animation-delay: 0.32s;
+}
+.tile:nth-child(10) .widget-card {
+	animation-delay: 0.36s;
+}
+
+@media (max-width: 1024px) {
+	.tile--2 {
+		grid-column: span 4;
+	}
+
+	.tile--4,
+	.tile--6,
+	.tile--8 {
+		grid-column: span 6;
 	}
 }
 
-.widget-grid > div:nth-child(1) .widget-card {
-	animation-delay: 0s;
-}
-
-.widget-grid > div:nth-child(2) .widget-card {
-	animation-delay: 0.08s;
-}
-
-.widget-grid > div:nth-child(3) .widget-card {
-	animation-delay: 0.16s;
-}
-
-.widget-grid > div:nth-child(4) .widget-card {
-	animation-delay: 0.24s;
-}
-
-.widget-grid > div:nth-child(5) .widget-card {
-	animation-delay: 0.32s;
+@media (max-width: 768px) {
+	.tile--2,
+	.tile--4,
+	.tile--6,
+	.tile--8 {
+		grid-column: span 12;
+	}
 }
 </style>
