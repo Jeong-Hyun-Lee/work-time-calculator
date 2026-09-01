@@ -225,9 +225,9 @@ const progress = computed(() => {
 
 .countdown-progress {
 	width: 100%;
-	height: 4px;
+	height: 6px;
 	border-radius: 999px;
-	background: rgba(255, 255, 255, 0.15);
+	background: rgba(255, 255, 255, 0.25);
 	overflow: hidden;
 	margin-top: var(--spacing-16);
 	margin-bottom: 2.75rem;

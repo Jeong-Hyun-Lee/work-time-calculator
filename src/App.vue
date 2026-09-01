@@ -47,11 +47,13 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 .widget--sm {
 	grid-column: span 4;
 	display: flex;
+	flex-direction: column;
 }
 
 .widget--md {
 	grid-column: span 6;
 	display: flex;
+	flex-direction: column;
 }
 
 @media (max-width: 768px) {

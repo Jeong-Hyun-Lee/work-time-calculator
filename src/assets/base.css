@@ -52,6 +52,10 @@
 }
 
 .widget-card {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	width: 100%;
 	background: var(--color-paper);
 	border: 1px solid var(--color-hairline);
 	border-radius: var(--radius-card);
