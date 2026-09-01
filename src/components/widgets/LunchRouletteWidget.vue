@@ -2,7 +2,7 @@
 	<div class="widget-card">
 		<WidgetHeader icon="🍱" title="점심 메뉴 룰렛" />
 		<p class="roulette-result" :class="{ spinning: isSpinning }">
-			{{ isSpinning ? '고민 중...' : result || '룰렛을 돌려보세요' }}
+			{{ result || '룰렛을 돌려보세요' }}
 		</p>
 		<button type="button" class="btn-solid" :disabled="isSpinning" @click="spin">
 			룰렛 돌리기

@@ -104,6 +104,12 @@
 	background: var(--color-surface-alt);
 }
 
+.btn-solid:focus-visible,
+.btn-outline:focus-visible {
+	outline: 2px solid var(--color-ink);
+	outline-offset: 2px;
+}
+
 *,
 *::before,
 *::after {

@@ -10,7 +10,7 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 <template>
 	<TimeCalculator />
 	<div class="widget-grid">
-		<div class="widget--md">
+		<div class="widget--sm">
 			<LottoWidget />
 		</div>
 		<div class="widget--sm">
@@ -46,10 +46,12 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 
 .widget--sm {
 	grid-column: span 4;
+	display: flex;
 }
 
 .widget--md {
 	grid-column: span 6;
+	display: flex;
 }
 
 @media (max-width: 768px) {

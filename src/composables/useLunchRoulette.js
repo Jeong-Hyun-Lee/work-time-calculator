@@ -1,6 +1,9 @@
 import { ref } from 'vue'
 import menus from '../data/lunchMenus.json'
 
+const FLICKER_INTERVAL_MS = 80
+const SPIN_DURATION_MS = 600
+
 export function useLunchRoulette() {
 	const result = ref(null)
 	const isSpinning = ref(false)
@@ -8,13 +11,16 @@ export function useLunchRoulette() {
 	const spin = () => {
 		if (isSpinning.value) return
 		isSpinning.value = true
-		result.value = null
+
+		const flickerId = setInterval(() => {
+			result.value = menus[Math.floor(Math.random() * menus.length)]
+		}, FLICKER_INTERVAL_MS)
 
 		setTimeout(() => {
-			const index = Math.floor(Math.random() * menus.length)
-			result.value = menus[index]
+			clearInterval(flickerId)
+			result.value = menus[Math.floor(Math.random() * menus.length)]
 			isSpinning.value = false
-		}, 600)
+		}, SPIN_DURATION_MS)
 	}
 
 	return {
