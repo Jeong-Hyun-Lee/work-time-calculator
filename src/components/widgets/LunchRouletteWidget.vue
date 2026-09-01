@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-card">
+	<div class="widget-card confetti-blue">
 		<WidgetHeader icon="🍱" title="점심 메뉴 룰렛" />
 		<p class="roulette-result" :class="{ spinning: isSpinning }">
 			{{ result || '룰렛을 돌려보세요' }}

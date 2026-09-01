@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-card">
+	<div class="widget-card confetti-yellow">
 		<WidgetHeader icon="🎱" title="로또 번호 생성기" />
 		<div v-if="numbers.length" class="lotto-balls">
 			<span v-for="n in numbers" :key="n" class="ball">{{ n }}</span>

@@ -1,16 +1,22 @@
 :root {
-	--color-canvas: #f5f5f5;
+	--color-canvas: #f9faf9;
 	--color-paper: #ffffff;
-	--color-surface-alt: #fafafa;
-	--color-ink: #0a0a0a;
-	--color-ink-soft: #171717;
-	--color-mid-gray: #737373;
-	--color-hairline: #e5e5e5;
+	--color-surface-alt: #ecefec;
+	--color-ink: #000000;
+	--color-ink-soft: #0f0f0f;
+	--color-mid-gray: #5a585a;
+	--color-hairline: #0f0f0f;
 	--color-ember: #e7000b;
-	--color-ink-inverse-soft: #a3a3a3;
+	--color-ink-inverse-soft: #a5a5a5;
+
+	--color-input-bg: #eeeeee;
+	--color-acid-lime: #05c92f;
+	--color-sticker-yellow: #fcea59;
+	--color-cotton-pink: #ffd0e2;
+	--color-powder-blue: #a7cbf6;
 
 	--font-sans:
-		'Inter',
+		'Space Grotesk',
 		-apple-system,
 		BlinkMacSystemFont,
 		'Segoe UI',
@@ -32,10 +38,10 @@
 	--text-heading-lg: 36px;
 	--text-display: 48px;
 
-	--radius-small: 6px;
-	--radius-nested: 10px;
-	--radius-control: 18px;
-	--radius-card: 24px;
+	--radius-small: 9px;
+	--radius-nested: 14px;
+	--radius-control: 35px;
+	--radius-card: 17.5px;
 
 	--spacing-4: 4px;
 	--spacing-8: 8px;
@@ -44,11 +50,6 @@
 	--spacing-20: 20px;
 	--spacing-24: 24px;
 	--spacing-48: 48px;
-
-	--shadow-card:
-		0 0 0 1px rgba(23, 23, 23, 0.05),
-		0 1px 3px rgba(0, 0, 0, 0.1),
-		0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .widget-card {
@@ -59,8 +60,19 @@
 	background: var(--color-paper);
 	border: 1px solid var(--color-hairline);
 	border-radius: var(--radius-card);
-	box-shadow: var(--shadow-card);
 	padding: var(--spacing-20);
+}
+
+.widget-card.confetti-yellow {
+	background: var(--color-sticker-yellow);
+}
+
+.widget-card.confetti-pink {
+	background: var(--color-cotton-pink);
+}
+
+.widget-card.confetti-blue {
+	background: var(--color-powder-blue);
 }
 
 .btn-solid {
@@ -114,7 +126,7 @@
 	justify-content: center;
 	background: transparent;
 	color: var(--color-paper);
-	border: 1px solid var(--color-hairline);
+	border: 1px solid var(--color-paper);
 	border-radius: var(--radius-control);
 	padding: var(--spacing-8) var(--spacing-16);
 	font-size: var(--text-body);
@@ -125,7 +137,7 @@
 }
 
 .btn-outline-inverse:hover {
-	background: rgba(255, 255, 255, 0.08);
+	background: rgba(255, 255, 255, 0.12);
 }
 
 .btn-outline-inverse:focus-visible {

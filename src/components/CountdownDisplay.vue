@@ -235,7 +235,7 @@ const progress = computed(() => {
 
 .countdown-progress-fill {
 	height: 100%;
-	background: var(--color-paper);
+	background: var(--color-acid-lime);
 	border-radius: 999px;
 	transition: width 1s linear;
 }

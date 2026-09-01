@@ -1,5 +1,5 @@
 <template>
-	<div class="widget-card">
+	<div class="widget-card confetti-pink">
 		<WidgetHeader icon="💬" title="오늘의 한마디" />
 		<p class="quote-text">{{ quote.text }}</p>
 		<button type="button" class="btn-outline" @click="next">다른 명언 보기</button>
