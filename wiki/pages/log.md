@@ -23,3 +23,8 @@ Updated: overview.md, README.md, architecture.md.
 architecture.md에 위젯 허브 섹션을 추가하던 중, `redesign/mono-ui`에서 삭제된 `ElectricEffects.vue`/`GokuSilhouette.vue`/`ThemeSelector.vue`/`useTheme.js`가 그대로 남아있던 것을 발견 — 해당 브랜치 작업 때 architecture.md가 갱신 대상에서 빠졌던 게 원인. 목록에서 제거하고 Note를 현재 상태로 재작성.
 README.md의 "프로젝트 구조" 섹션은 여전히 테마 시스템(ThemeSelector.vue/useTheme.js/7종 테마)을 문서화하고 있고 위젯 허브 파일도 누락돼 있음 — 이번 범위 밖이라 후속 작업으로 남김.
 Updated: architecture.md.
+
+## [2026-09-01] ingest | Google Analytics 4 연동
+`src/analytics.js` 추가 — gtag.js를 런타임에 동적 삽입, `src/main.js`에서 mount 전에 `initAnalytics()` 호출. Measurement ID는 클라이언트 번들에 노출되는 공개 값이라 env가 아닌 코드 상수(`GA_MEASUREMENT_ID`)로 둠. 상수가 비어있거나 개발 서버(`import.meta.env.PROD === false`)면 스크립트를 아예 로드하지 않아 로컬 트래픽이 통계에 섞이지 않음. 기본 page_view만 수집하고 커스텀 이벤트는 미구현.
+architecture.md의 잔여 드리프트도 함께 정리: 삭제된 `TimeCalculator.vue`/`TimeInfoCards.vue` 제거, 누락됐던 `StatTile.vue` 추가, 미사용 `useSEO.js` 표시.
+Updated: architecture.md.
