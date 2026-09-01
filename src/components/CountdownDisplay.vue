@@ -2,7 +2,7 @@
 	<div class="countdown-section widget-card widget-card--dark" :class="stateClass">
 		<div v-if="diffInSeconds > 0" class="countdown">
 			<div class="countdown-icon">⏳</div>
-			<div class="countdown-label">퇴근까지 남은 시간</div>
+			<div class="countdown-label">퇴근기모리장단까지 남은 시간</div>
 			<div class="countdown-value">
 				<span class="time-unit">
 					<span class="number">{{ String(hours).padStart(2, '0') }}</span>
@@ -101,7 +101,7 @@ function copyRemainingTime() {
 	const h = String(props.hours).padStart(2, '0')
 	const m = String(props.minutes).padStart(2, '0')
 	const s = String(props.remainingSeconds).padStart(2, '0')
-	copyToClipboard(`퇴근까지 ${h}시간 ${m}분 ${s}초`)
+	copyToClipboard(`퇴근기모리장단까지 ${h}시간 ${m}분 ${s}초`)
 }
 
 function copyOverdueTime() {
