@@ -1,13 +1,6 @@
 <template>
-	<div class="countdown-section widget-card widget-card--dark">
-		<div
-			v-if="diffInSeconds > 0"
-			class="countdown"
-			:class="{
-				warning: diffInSeconds <= 7200 && diffInSeconds > 3600,
-				urgent: diffInSeconds <= 3600,
-			}"
-		>
+	<div class="countdown-section widget-card widget-card--dark" :class="stateClass">
+		<div v-if="diffInSeconds > 0" class="countdown">
 			<div class="countdown-icon">⏳</div>
 			<div class="countdown-label">퇴근까지 남은 시간</div>
 			<div class="countdown-value">
@@ -155,6 +148,13 @@ const props = defineProps({
 
 const TOTAL_WORK_SECONDS = computed(() => (props.isHalfDay ? 4 * 3600 : 9 * 3600))
 
+const stateClass = computed(() => {
+	if (props.diffInSeconds <= 0) return 'is-overdue'
+	if (props.diffInSeconds <= 3600) return 'is-urgent'
+	if (props.diffInSeconds <= 7200) return 'is-warning'
+	return ''
+})
+
 const progress = computed(() => {
 	if (props.diffInSeconds <= 0) return 100
 	const elapsed = TOTAL_WORK_SECONDS.value - props.diffInSeconds
@@ -165,6 +165,9 @@ const progress = computed(() => {
 <style scoped>
 .countdown-section {
 	justify-content: center;
+	animation:
+		cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+		glow 3s ease-in-out infinite;
 }
 
 .countdown {
@@ -174,25 +177,25 @@ const progress = computed(() => {
 	justify-content: center;
 	text-align: center;
 	position: relative;
-	overflow: hidden;
-	border-radius: var(--radius-card);
-	animation: glow 3s ease-in-out infinite;
 }
 
-/* master 기본 테마: 회전하는 광원 오버레이 */
-.countdown::before {
+/* master 기본 테마: 회전하는 광원 오버레이 (카드 전체를 덮음) */
+.countdown-section::before {
 	content: '';
 	position: absolute;
-	top: -30%;
-	left: -30%;
-	width: 160%;
-	height: 160%;
+	top: 50%;
+	left: 50%;
+	/* 정사각형으로 만들어 중심 회전 시 모서리가 화면에 드러나지 않게 함 */
+	width: 140vmax;
+	height: 140vmax;
+	margin: -70vmax 0 0 -70vmax;
 	background: radial-gradient(
-		circle,
-		rgba(255, 255, 255, 0.1) 0%,
-		transparent 70%
+		circle at center,
+		rgba(255, 255, 255, 0.12) 0%,
+		rgba(255, 255, 255, 0.05) 35%,
+		transparent 65%
 	);
-	animation: rotate 10s linear infinite;
+	animation: rotate 18s linear infinite;
 	pointer-events: none;
 }
 
@@ -232,9 +235,11 @@ const progress = computed(() => {
 }
 
 /* 2시간 이하 — 경고 */
-.countdown.warning {
+.countdown-section.is-warning {
 	background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
-	animation: glowWarning 2s ease-in-out infinite;
+	animation:
+		cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+		glowWarning 2s ease-in-out infinite;
 }
 
 @keyframes glowWarning {
@@ -247,7 +252,7 @@ const progress = computed(() => {
 	}
 }
 
-.countdown.warning .countdown-icon {
+.is-warning .countdown-icon {
 	animation: shake 0.5s ease-in-out infinite;
 }
 
@@ -265,9 +270,11 @@ const progress = computed(() => {
 }
 
 /* 1시간 이하 — 긴급 */
-.countdown.urgent {
+.countdown-section.is-urgent {
 	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-	animation: glowUrgent 1s ease-in-out infinite;
+	animation:
+		cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+		glowUrgent 1s ease-in-out infinite;
 }
 
 @keyframes glowUrgent {
@@ -284,7 +291,7 @@ const progress = computed(() => {
 	}
 }
 
-.countdown.urgent .countdown-icon {
+.is-urgent .countdown-icon {
 	animation:
 		shakeUrgent 0.3s ease-in-out infinite,
 		spin 3s linear infinite;
@@ -306,7 +313,7 @@ const progress = computed(() => {
 	}
 }
 
-.countdown.urgent .number {
+.is-urgent .number {
 	animation: numberPulse 1s ease-in-out infinite;
 }
 
@@ -323,9 +330,11 @@ const progress = computed(() => {
 }
 
 /* 야근 경과 */
-.countdown.overdue {
+.countdown-section.is-overdue {
 	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-	animation: glowOverdue 3s ease-in-out infinite;
+	animation:
+		cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards,
+		glowOverdue 3s ease-in-out infinite;
 }
 
 @keyframes glowOverdue {

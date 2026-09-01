@@ -8,14 +8,14 @@
 				class="ladder-input"
 				aria-label="참가자 이름"
 				placeholder="참가자 (쉼표 구분, 2~8명)&#10;예: 철수, 영희, 민수"
-				rows="2"
+				rows="3"
 			></textarea>
 			<textarea
 				v-model="prizesInput"
 				class="ladder-input"
 				aria-label="결과 목록"
 				placeholder="결과 (비우면 당첨 1개 + 나머지 꽝)&#10;예: 커피, 꽝, 꽝"
-				rows="2"
+				rows="3"
 			></textarea>
 		</div>
 
@@ -155,6 +155,8 @@ const activePoints = computed(() => {
 	font-size: var(--text-body);
 	color: var(--color-ink);
 	resize: vertical;
+	min-height: 84px;
+	line-height: 1.5;
 	transition:
 		border-color 0.2s ease,
 		background 0.2s ease;
