@@ -9,7 +9,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "cf:login": "npx --yes wrangler login",
+    "cf:whoami": "npx --yes wrangler whoami",
+    "deploy": "npm run build && npx --yes wrangler pages deploy dist --project-name=work-time-calculator --branch=main --commit-dirty=true",
+    "deploy:preview": "npm run build && npx --yes wrangler pages deploy dist --project-name=work-time-calculator --commit-dirty=true"
   },
   "dependencies": {
     "@vueuse/core": "^14.1.0",
