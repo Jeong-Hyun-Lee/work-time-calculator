@@ -60,6 +60,9 @@ const {
 	calculateTime,
 } = useTimeCalculation(startTime, isHalfDay)
 
+// 첫 렌더에 diffInSeconds 기본값(0)으로 "야근 시간 경과"가 잠깐 보이는 것 방지
+calculateTime()
+
 const { checkHourlyNotification, resetNotifiedHours } = useHourlyNotification(
 	hours,
 	minutes,
