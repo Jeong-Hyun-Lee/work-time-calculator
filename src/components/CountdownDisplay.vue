@@ -185,17 +185,19 @@ const progress = computed(() => {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	/* 정사각형으로 만들어 중심 회전 시 모서리가 화면에 드러나지 않게 함 */
-	width: 140vmax;
-	height: 140vmax;
-	margin: -70vmax 0 0 -70vmax;
+	/* 정사각형이라 회전해도 모서리가 드러나지 않고,
+	   중심에서 벗어난 작은 밝은 점이 카드 위를 훑고 지나감 */
+	width: 200%;
+	aspect-ratio: 1;
+	transform-origin: center;
+	margin: -100% 0 0 -100%;
 	background: radial-gradient(
-		circle at center,
-		rgba(255, 255, 255, 0.12) 0%,
-		rgba(255, 255, 255, 0.05) 35%,
-		transparent 65%
+		circle at 32% 50%,
+		rgba(255, 255, 255, 0.22) 0%,
+		rgba(255, 255, 255, 0.1) 8%,
+		transparent 18%
 	);
-	animation: rotate 18s linear infinite;
+	animation: rotate 10s linear infinite;
 	pointer-events: none;
 }
 
