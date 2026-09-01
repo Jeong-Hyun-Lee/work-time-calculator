@@ -61,6 +61,23 @@
 	border: 1px solid var(--color-hairline);
 	border-radius: var(--radius-card);
 	padding: var(--spacing-20);
+	animation: cardEnter 0.5s ease-out backwards;
+	transition: transform 0.2s ease;
+}
+
+@keyframes cardEnter {
+	from {
+		opacity: 0;
+		transform: translateY(16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.widget-card:hover {
+	transform: translateY(-3px);
 }
 
 .widget-card.confetti-yellow {
@@ -73,6 +90,12 @@
 
 .widget-card.confetti-blue {
 	background: var(--color-powder-blue);
+}
+
+.widget-card.confetti-yellow:hover,
+.widget-card.confetti-pink:hover,
+.widget-card.confetti-blue:hover {
+	transform: translateY(-3px) rotate(-0.6deg);
 }
 
 .btn-solid {
@@ -143,6 +166,12 @@
 .btn-outline-inverse:focus-visible {
 	outline: 2px solid var(--color-paper);
 	outline-offset: 2px;
+}
+
+.btn-solid:active,
+.btn-outline:active,
+.btn-outline-inverse:active {
+	transform: scale(0.97);
 }
 
 .btn-solid:focus-visible,

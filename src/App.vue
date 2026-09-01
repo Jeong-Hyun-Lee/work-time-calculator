@@ -62,4 +62,24 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 		grid-column: span 12;
 	}
 }
+
+.widget-grid > div:nth-child(1) .widget-card {
+	animation-delay: 0s;
+}
+
+.widget-grid > div:nth-child(2) .widget-card {
+	animation-delay: 0.08s;
+}
+
+.widget-grid > div:nth-child(3) .widget-card {
+	animation-delay: 0.16s;
+}
+
+.widget-grid > div:nth-child(4) .widget-card {
+	animation-delay: 0.24s;
+}
+
+.widget-grid > div:nth-child(5) .widget-card {
+	animation-delay: 0.32s;
+}
 </style>
