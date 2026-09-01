@@ -35,6 +35,19 @@ import ClockIcon from './icons/ClockIcon.vue'
 	height: 22px;
 	color: #ffffff;
 	flex-shrink: 0;
+	animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.12);
+		opacity: 0.85;
+	}
 }
 
 .app-header-icon :deep(svg) {

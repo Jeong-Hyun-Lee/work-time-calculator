@@ -1,6 +1,13 @@
 <template>
 	<div class="countdown-section widget-card widget-card--dark">
-		<div v-if="diffInSeconds > 0" class="countdown">
+		<div
+			v-if="diffInSeconds > 0"
+			class="countdown"
+			:class="{
+				warning: diffInSeconds <= 7200 && diffInSeconds > 3600,
+				urgent: diffInSeconds <= 3600,
+			}"
+		>
 			<div class="countdown-icon">⏳</div>
 			<div class="countdown-label">퇴근까지 남은 시간</div>
 			<div class="countdown-value">
@@ -167,12 +174,168 @@ const progress = computed(() => {
 	justify-content: center;
 	text-align: center;
 	position: relative;
+	overflow: hidden;
+	border-radius: var(--radius-card);
+	animation: glow 3s ease-in-out infinite;
+}
+
+/* master 기본 테마: 회전하는 광원 오버레이 */
+.countdown::before {
+	content: '';
+	position: absolute;
+	top: -30%;
+	left: -30%;
+	width: 160%;
+	height: 160%;
+	background: radial-gradient(
+		circle,
+		rgba(255, 255, 255, 0.1) 0%,
+		transparent 70%
+	);
+	animation: rotate 10s linear infinite;
+	pointer-events: none;
+}
+
+@keyframes glow {
+	0%,
+	100% {
+		box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+	}
+	50% {
+		box-shadow: 0 20px 50px rgba(102, 126, 234, 0.6);
+	}
+}
+
+@keyframes rotate {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 .countdown-icon {
 	font-size: 2rem;
 	margin-bottom: var(--spacing-12);
 	display: block;
+	animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* 2시간 이하 — 경고 */
+.countdown.warning {
+	background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+	animation: glowWarning 2s ease-in-out infinite;
+}
+
+@keyframes glowWarning {
+	0%,
+	100% {
+		box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+	}
+	50% {
+		box-shadow: 0 20px 50px rgba(245, 158, 11, 0.6);
+	}
+}
+
+.countdown.warning .countdown-icon {
+	animation: shake 0.5s ease-in-out infinite;
+}
+
+@keyframes shake {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(-3px);
+	}
+	75% {
+		transform: translateX(3px);
+	}
+}
+
+/* 1시간 이하 — 긴급 */
+.countdown.urgent {
+	background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+	animation: glowUrgent 1s ease-in-out infinite;
+}
+
+@keyframes glowUrgent {
+	0%,
+	100% {
+		box-shadow:
+			0 15px 40px rgba(239, 68, 68, 0.4),
+			0 0 20px rgba(239, 68, 68, 0.3);
+	}
+	50% {
+		box-shadow:
+			0 25px 60px rgba(239, 68, 68, 0.6),
+			0 0 30px rgba(239, 68, 68, 0.5);
+	}
+}
+
+.countdown.urgent .countdown-icon {
+	animation:
+		shakeUrgent 0.3s ease-in-out infinite,
+		spin 3s linear infinite;
+}
+
+@keyframes shakeUrgent {
+	0%,
+	100% {
+		transform: translateX(0) translateY(0);
+	}
+	25% {
+		transform: translateX(-5px) translateY(-2px);
+	}
+	50% {
+		transform: translateX(0) translateY(0);
+	}
+	75% {
+		transform: translateX(5px) translateY(2px);
+	}
+}
+
+.countdown.urgent .number {
+	animation: numberPulse 1s ease-in-out infinite;
+}
+
+@keyframes numberPulse {
+	0%,
+	100% {
+		transform: scale(1);
+		color: #ffffff;
+	}
+	50% {
+		transform: scale(1.1);
+		color: #fef2f2;
+	}
+}
+
+/* 야근 경과 */
+.countdown.overdue {
+	background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+	animation: glowOverdue 3s ease-in-out infinite;
+}
+
+@keyframes glowOverdue {
+	0%,
+	100% {
+		box-shadow: 0 15px 40px rgba(245, 87, 108, 0.4);
+	}
+	50% {
+		box-shadow: 0 20px 50px rgba(245, 87, 108, 0.6);
+	}
 }
 
 .countdown-label {
@@ -220,6 +383,26 @@ const progress = computed(() => {
 	font-weight: 300;
 	color: var(--color-ink-inverse-soft);
 	margin: 0 0.25rem;
+	animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 0.7;
+	}
+	50% {
+		opacity: 0.3;
+	}
+}
+
+.countdown-icon,
+.countdown-label,
+.countdown-value,
+.countdown-progress,
+.copy-btn {
+	position: relative;
+	z-index: 1;
 }
 
 .countdown-progress {

@@ -89,6 +89,8 @@ onUnmounted(() => {
 </script>
 
 <template>
+	<div class="background-animation"></div>
+
 	<AppHeader />
 
 	<main class="tile-grid">
@@ -148,6 +150,47 @@ onUnmounted(() => {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+/* master 기본 테마의 떠다니는 배경 레이어 */
+.background-animation {
+	position: fixed;
+	inset: 0;
+	background:
+		radial-gradient(
+			circle at 20% 50%,
+			rgba(255, 255, 255, 0.1) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 80% 80%,
+			rgba(255, 255, 255, 0.1) 0%,
+			transparent 50%
+		),
+		radial-gradient(
+			circle at 40% 20%,
+			rgba(255, 255, 255, 0.05) 0%,
+			transparent 50%
+		);
+	animation: float 20s ease-in-out infinite;
+	pointer-events: none;
+	z-index: 0;
+}
+
+@keyframes float {
+	0%,
+	100% {
+		transform: translateY(0) rotate(0deg);
+	}
+	50% {
+		transform: translateY(-20px) rotate(5deg);
+	}
+}
+
+.app-header,
+.tile-grid {
+	position: relative;
+	z-index: 1;
 }
 
 .tile-grid {

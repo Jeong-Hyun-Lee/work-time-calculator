@@ -160,8 +160,10 @@ const handleHalfDayChange = (event) => {
 
 .input-section input[type='time']:focus {
 	outline: none;
-	border-color: var(--color-hairline);
-	background: var(--color-paper);
+	border-color: var(--color-primary);
+	background: #ffffff;
+	box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+	transform: translateY(-2px);
 }
 
 .preset-row {
