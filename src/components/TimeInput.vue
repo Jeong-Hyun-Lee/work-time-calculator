@@ -11,8 +11,11 @@
 					type="checkbox"
 					:checked="isHalfDay"
 					@change="handleHalfDayChange"
-					class="halfday-checkbox"
+					class="halfday-checkbox-input"
 				/>
+				<span class="halfday-toggle-track">
+					<span class="halfday-toggle-thumb"></span>
+				</span>
 				<span class="checkbox-label-text">하프데이</span>
 			</label>
 		</div>
@@ -27,7 +30,18 @@
 				@click="handleInputClick"
 			/>
 		</div>
-		
+		<div class="preset-row">
+			<button
+				v-for="preset in presets"
+				:key="preset"
+				type="button"
+				class="preset-chip"
+				:class="{ active: modelValue === preset }"
+				@click="selectPreset(preset)"
+			>
+				{{ preset }}
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -48,6 +62,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'change', 'update:isHalfDay'])
 
 const timeInput = ref(null)
+
+const presets = ['08:00', '08:30', '09:00', '09:30', '10:00']
 
 const openTimePicker = () => {
 	if (!timeInput.value) return
@@ -80,6 +96,11 @@ const handleWrapperClick = (event) => {
 const handleChange = (event) => {
 	emit('update:modelValue', event.target.value)
 	emit('change', event.target.value)
+}
+
+const selectPreset = (preset) => {
+	emit('update:modelValue', preset)
+	emit('change', preset)
 }
 
 const handleHalfDayChange = (event) => {
@@ -144,6 +165,44 @@ const handleHalfDayChange = (event) => {
 	background: var(--color-paper);
 }
 
+.preset-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-8);
+	margin-top: var(--spacing-12);
+}
+
+.preset-chip {
+	padding: var(--spacing-4) var(--spacing-12);
+	border: 1px solid var(--color-hairline);
+	border-radius: var(--radius-control);
+	background: var(--color-canvas);
+	color: var(--color-mid-gray);
+	font-size: var(--text-caption);
+	font-family: var(--font-sans);
+	cursor: pointer;
+	transition:
+		background 0.15s ease,
+		color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.preset-chip:hover {
+	background: var(--color-surface-alt);
+	color: var(--color-ink);
+}
+
+.preset-chip.active {
+	background: var(--color-ink-soft);
+	border-color: var(--color-ink-soft);
+	color: var(--color-paper);
+}
+
+.preset-chip:focus-visible {
+	outline: 2px solid var(--color-ink);
+	outline-offset: 2px;
+}
+
 .halfday-checkbox-section {
 	margin: 0;
 }
@@ -151,7 +210,7 @@ const handleHalfDayChange = (event) => {
 .halfday-label {
 	display: flex;
 	align-items: center;
-	gap: var(--spacing-12);
+	gap: var(--spacing-8);
 	cursor: pointer;
 	user-select: none;
 	color: var(--color-ink);
@@ -159,15 +218,55 @@ const handleHalfDayChange = (event) => {
 	font-size: var(--text-body);
 }
 
-.halfday-label:hover {
-	color: var(--color-mid-gray);
+.halfday-label:hover .halfday-toggle-track {
+	background: var(--color-mid-gray);
 }
 
-.halfday-checkbox {
-	width: 20px;
+.halfday-checkbox-input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.halfday-toggle-track {
+	position: relative;
+	width: 36px;
 	height: 20px;
-	cursor: pointer;
-	accent-color: var(--color-ink);
+	border-radius: 999px;
+	background: var(--color-hairline);
+	transition: background 0.2s ease;
+	flex-shrink: 0;
+}
+
+.halfday-toggle-thumb {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: var(--color-paper);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+	transition: transform 0.2s ease;
+}
+
+.halfday-checkbox-input:checked + .halfday-toggle-track {
+	background: var(--color-ink-soft);
+}
+
+.halfday-checkbox-input:checked + .halfday-toggle-track .halfday-toggle-thumb {
+	transform: translateX(16px);
+}
+
+.halfday-checkbox-input:focus-visible + .halfday-toggle-track {
+	outline: 2px solid var(--color-ink);
+	outline-offset: 2px;
 }
 
 .checkbox-label-text {
