@@ -20,16 +20,24 @@
 			</label>
 		</div>
 	</div>
-		<div class="input-wrapper" @click="handleWrapperClick">
-			<input
-				ref="timeInput"
-				id="start-time"
-				type="time"
-				:value="modelValue"
-				@change="handleChange"
-				@click="handleInputClick"
-			/>
-		</div>
+		<VueDatePicker
+			v-model="timeModel"
+			time-picker
+			auto-apply
+			teleport
+			:input-attrs="{ id: 'start-time', clearable: false }"
+			:aria-labels="{ input: '출근 시간' }"
+			:time-config="{
+				is24: true,
+				minutesIncrement: MINUTE_STEP,
+				minutesGridIncrement: MINUTE_GRID_STEP,
+			}"
+			:formats="{ input: 'HH:mm' }"
+		>
+			<template #input-icon>
+				<ClockIcon class="dp-clock-icon" />
+			</template>
+		</VueDatePicker>
 		<div class="preset-row">
 			<button
 				v-for="preset in presets"
@@ -46,7 +54,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
+import ClockIcon from './icons/ClockIcon.vue'
 
 const props = defineProps({
 	modelValue: {
@@ -61,42 +71,30 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change', 'update:isHalfDay'])
 
-const timeInput = ref(null)
-
 const presets = ['08:00', '08:30', '09:00', '09:30', '10:00']
 
-const openTimePicker = () => {
-	if (!timeInput.value) return
+// 화살표 버튼은 1분, 분 오버레이 그리드는 5분 간격(1분이면 셀 60개라 고르기 힘듦)
+const MINUTE_STEP = 1
+const MINUTE_GRID_STEP = 5
 
-	timeInput.value.focus()
+const pad = (value) => String(value).padStart(2, '0')
 
-	// showPicker는 지원되는 브라우저에서만 동작
-	if (typeof timeInput.value.showPicker === 'function') {
-		try {
-			timeInput.value.showPicker()
-		} catch (error) {
-			// showPicker 실패 시 무시 (일부 브라우저에서 제한될 수 있음)
-		}
-	}
-}
+// VueDatePicker의 time-picker 모드는 { hours, minutes } 객체를 다루므로
+// 저장 포맷인 'HH:mm' 문자열과 양방향으로 변환
+const timeModel = computed({
+	get() {
+		const [hours, minutes] = props.modelValue.split(':').map(Number)
+		if (Number.isNaN(hours) || Number.isNaN(minutes)) return null
+		return { hours, minutes }
+	},
+	set(value) {
+		if (!value) return
 
-const handleInputClick = () => {
-	// input 필드 클릭 시 시간 선택기 열기
-	openTimePicker()
-}
-
-const handleWrapperClick = (event) => {
-	// wrapper 클릭 시 (input 필드가 아닌 영역)
-	if (event.target !== timeInput.value) {
-		event.preventDefault()
-		openTimePicker()
-	}
-}
-
-const handleChange = (event) => {
-	emit('update:modelValue', event.target.value)
-	emit('change', event.target.value)
-}
+		const next = `${pad(value.hours)}:${pad(value.minutes)}`
+		emit('update:modelValue', next)
+		emit('change', next)
+	},
+})
 
 const selectPreset = (preset) => {
 	emit('update:modelValue', preset)
@@ -134,36 +132,52 @@ const handleHalfDayChange = (event) => {
 	font-size: 1.2rem;
 }
 
-.input-wrapper {
-	position: relative;
-	cursor: pointer;
-}
-
-.input-section input[type='time'] {
+/* VueDatePicker 입력 필드를 기존 위젯 컨트롤 스타일에 맞춤.
+   메뉴는 body로 teleport 되므로 테마 변수는 main.css(전역)에 있음 */
+.input-section :deep(.dp--input) {
 	width: 100%;
 	padding: var(--spacing-8) var(--spacing-12);
+	font-family: var(--font-sans);
 	font-size: var(--text-body-lg);
-	border: 1px solid transparent;
-	border-radius: var(--radius-control);
-	transition:
-		border-color 0.2s ease,
-		background 0.2s ease;
-	background: var(--color-canvas);
 	font-weight: 600;
 	color: var(--color-ink);
+	background: var(--color-canvas);
+	border: 1px solid var(--color-field-border);
+	border-radius: var(--radius-control);
+	box-shadow: inset 0 1px 2px rgba(26, 26, 46, 0.06);
 	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		background 0.2s ease,
+		box-shadow 0.2s ease;
 }
 
-.input-section input[type='time']:hover {
-	background: var(--color-surface-alt);
+.input-section :deep(.dp--input-icon-pad) {
+	padding-left: var(--dp-input-icon-padding);
 }
 
-.input-section input[type='time']:focus {
-	outline: none;
+.dp-clock-icon {
+	/* inline svg는 baseline 여백이 붙어 부모 박스가 커지고, 그만큼 세로 중앙이 어긋남 */
+	display: block;
+	width: 18px;
+	height: 18px;
+	margin-left: var(--spacing-12);
+	color: var(--color-mid-gray);
+}
+
+.input-section :deep(.dp--input:hover) {
+	background: #ffffff;
+	border-color: var(--color-ink-soft);
+}
+
+.input-section :deep(.dp--input-focus) {
 	border-color: var(--color-primary);
 	background: #ffffff;
 	box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-	transform: translateY(-2px);
+}
+
+.input-section :deep(.dp--input-icon) {
+	color: var(--color-mid-gray);
 }
 
 .preset-row {

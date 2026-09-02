@@ -16,6 +16,7 @@
     "deploy:preview": "npm run build && npx --yes wrangler pages deploy dist --project-name=work-time-calculator --commit-dirty=true"
   },
   "dependencies": {
+    "@vuepic/vue-datepicker": "^14.0.0",
     "@vueuse/core": "^14.1.0",
     "dayjs": "^1.11.19",
     "vue": "^3.5.25"

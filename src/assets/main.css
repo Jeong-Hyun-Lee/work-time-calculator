@@ -13,3 +13,33 @@ a,
 		background-color: hsla(160, 100%, 37%, 0.2);
 	}
 }
+
+/* @vuepic/vue-datepicker 테마를 프로젝트 디자인 토큰에 매핑.
+   팝오버 메뉴가 body로 teleport 되므로 scoped 스타일로는 닿지 않아 전역에 둠.
+   v14 클래스는 .dp--theme-light (구버전 문서의 .dp__theme_light 아님). */
+.dp--theme-light {
+	--dp-background-color: #ffffff;
+	--dp-text-color: var(--color-ink);
+	--dp-hover-color: var(--color-canvas);
+	--dp-hover-text-color: var(--color-ink);
+	--dp-hover-icon-color: var(--color-ink-soft);
+	--dp-primary-color: var(--color-ink-soft);
+	--dp-primary-text-color: #ffffff;
+	--dp-primary-disabled-color: var(--color-mid-gray);
+	--dp-secondary-color: var(--color-mid-gray);
+	--dp-border-color: var(--color-hairline);
+	--dp-menu-border-color: var(--color-hairline);
+	--dp-border-color-hover: var(--color-primary);
+	--dp-border-color-focus: var(--color-primary);
+	--dp-icon-color: var(--color-mid-gray);
+	--dp-disabled-color-text: var(--color-mid-gray);
+	--dp-highlight-color: var(--color-accent-soft);
+}
+
+:root {
+	--dp-font-family: var(--font-sans);
+	--dp-border-radius: var(--radius-nested);
+	--dp-cell-border-radius: var(--radius-small);
+	--dp-time-font-size: var(--text-heading-sm);
+	--dp-input-padding: var(--spacing-8) var(--spacing-12);
+}
