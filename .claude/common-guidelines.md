@@ -120,4 +120,5 @@
 - 스펙/요구사항 있는 다단계 작업: `superpowers:writing-plans`로 계획 작성 후 `superpowers:executing-plans`로 실행.
 - 신규 기능/버그 수정 구현: `superpowers:test-driven-development`.
 - 완료·수정·통과 주장 전: `superpowers:verification-before-completion` — 검증 명령 실제로 실행하고 출력 확인 후에만 주장.
+- 개발 후 UI 동작 테스트: `ecc:browser-qa` — 브라우저 자동화로 실제 화면에서 검증.
 - 개발 브랜치 마무리 시: `superpowers:finishing-a-development-branch`.
