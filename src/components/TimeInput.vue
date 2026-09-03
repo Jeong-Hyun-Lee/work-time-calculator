@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted } from 'vue'
+import { computed, nextTick, onUnmounted } from 'vue'
 import { VueDatePicker } from '@vuepic/vue-datepicker'
 import ClockIcon from './icons/ClockIcon.vue'
 
@@ -178,6 +178,7 @@ const adjustTime = (deltaMinutes) => {
 		hours: Math.floor(total / MINUTES_PER_HOUR),
 		minutes: total % MINUTES_PER_HOUR,
 	}
+	syncInputState()
 }
 
 const menuInput = () => document.getElementById('start-time')
@@ -193,6 +194,10 @@ const seedInputState = () => {
 	input.value = props.modelValue
 	input.dispatchEvent(new Event('input', { bubbles: true }))
 }
+
+// 라이브러리 밖에서 모델을 바꾸면(스크롤, 프리셋) 내부 상태는 옛 값으로 남아
+// blur 때 그 값으로 되돌려 버린다. 새 모델이 내려온 뒤 다시 심는다.
+const syncInputState = () => nextTick(seedInputState)
 
 // 입력 영역 위 스크롤. 포커스가 있을 때만 동작시켜,
 // 그냥 페이지를 넘기려던 스크롤이 시간을 바꿔버리는 일을 막는다
@@ -257,6 +262,7 @@ onUnmounted(unbindMenu)
 const selectPreset = (preset) => {
 	emit('update:modelValue', preset)
 	emit('change', preset)
+	syncInputState()
 }
 
 const handleHalfDayChange = (event) => {
