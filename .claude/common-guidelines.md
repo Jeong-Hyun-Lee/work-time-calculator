@@ -11,7 +11,7 @@
 - **caveman** — Caveman 모드 섹션. 마켓플레이스: GitHub `JuliusBrussee/caveman`.
 - **ponytail** — Ponytail 플러그인 지침 섹션. 마켓플레이스: GitHub `DietrichGebert/ponytail`.
 - **ecc** — 에이전트 팀 섹션의 `ecc:team-builder` 등. 마켓플레이스: `https://github.com/affaan-m/ECC.git`.
-- **claude-team-orchestration** — 에이전트 팀 섹션의 `swarm:team-management`/`swarm:orchestration-patterns`/`swarm:messaging`/`swarm:task-system`. 마켓플레이스: GitHub `zircote-plugins/claude-team-orchestration`.
+- **claude-team-orchestration** — 에이전트 팀 섹션의 `swarm:team-management`/`swarm:orchestration-patterns`/`swarm:messaging`/`swarm:task-system`. 마켓플레이스: GitHub `zircote-plugins/claude-team-orchestration`. ⚠️ Agent Teams는 실험적 기능이라 기본 비활성 — `settings.json`에 `"env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" }` 추가하거나 환경변수 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`로 export 필요.
 - **superpowers** — Superpowers 플러그인 지침 섹션. 마켓플레이스: GitHub `obra/superpowers-marketplace`.
 
 ## 코딩 전에 생각하기
