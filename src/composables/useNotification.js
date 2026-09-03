@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { useWebNotification } from '@vueuse/core'
+import { t } from '../i18n'
 
 let serviceWorkerRegistration = null
 
@@ -56,7 +57,7 @@ export const sendNotification = async (message, options = {}) => {
 		Array.isArray(options.actions)
 	) {
 		try {
-			await serviceWorkerRegistration.showNotification('퇴근시간 계산기', {
+			await serviceWorkerRegistration.showNotification(t('notification.title'), {
 				body: message,
 				icon: notificationIcon,
 				badge: options.badge || notificationIcon,
@@ -76,7 +77,7 @@ export const sendNotification = async (message, options = {}) => {
 
 	// useWebNotification을 사용하여 알림 표시
 	const notification = useWebNotification({
-		title: '퇴근시간 계산기',
+		title: t('notification.title'),
 		body: message,
 		icon: notificationIcon,
 		badge: options.badge || notificationIcon,
@@ -134,14 +135,17 @@ export const useHourlyNotification = (hours, minutes, remainingSeconds, diffInSe
 
 			// 더 풍부한 알림 옵션
 			const emoji = currentHours === 1 ? '⏰' : currentHours <= 3 ? '⏳' : '🕐'
-			const message = `${emoji} 퇴근까지 ${currentHours}시간 남았습니다!`
+			const message = t('notification.hoursLeft', {
+				emoji,
+				hours: currentHours,
+			})
 
 			await sendNotification(message, {
 				requireInteraction: currentHours <= 2, // 2시간 이하일 때는 상호작용 필요
 				actions: [
 					{
 						action: 'view',
-						title: '확인',
+						title: t('notification.confirm'),
 						icon: createNotificationIcon(),
 					},
 				],

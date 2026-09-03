@@ -1,11 +1,13 @@
 <template>
 	<div class="widget-card accent-violet">
-		<WidgetHeader icon="💬" title="오늘의 한마디" />
+		<WidgetHeader icon="💬" :title="$t('quote.title')" />
 		<Transition name="quote" mode="out-in">
 			<p class="quote-text" :key="quote.text">{{ quote.text }}</p>
 		</Transition>
-		<button type="button" class="btn-outline" @click="next">다른 명언 보기</button>
-		<p class="quote-disclaimer">재미로 보는 콘텐츠이며 실제 운세와 무관합니다</p>
+		<button type="button" class="btn-outline" @click="next">
+			{{ $t('quote.next') }}
+		</button>
+		<p class="quote-disclaimer">{{ $t('quote.disclaimer') }}</p>
 	</div>
 </template>
 

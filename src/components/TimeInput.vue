@@ -3,7 +3,7 @@
 		<div class="input-section-header">
 			<label for="start-time">
 				<span class="label-icon">🕐</span>
-				출근 시간
+				{{ $t('time.startTime') }}
 			</label>
 		<div class="halfday-checkbox-section">
 			<label class="halfday-label">
@@ -16,28 +16,49 @@
 				<span class="halfday-toggle-track">
 					<span class="halfday-toggle-thumb"></span>
 				</span>
-				<span class="checkbox-label-text">하프데이</span>
+				<span class="checkbox-label-text">{{ $t('time.halfDay') }}</span>
 			</label>
 		</div>
 	</div>
-		<VueDatePicker
-			v-model="timeModel"
-			time-picker
-			auto-apply
-			teleport
-			:input-attrs="{ id: 'start-time', clearable: false }"
-			:aria-labels="{ input: '출근 시간' }"
-			:time-config="{
-				is24: true,
-				minutesIncrement: MINUTE_STEP,
-				minutesGridIncrement: MINUTE_GRID_STEP,
-			}"
-			:formats="{ input: 'HH:mm' }"
-		>
-			<template #input-icon>
-				<ClockIcon class="dp-clock-icon" />
-			</template>
-		</VueDatePicker>
+		<div class="picker-wrap" @wheel="handleInputWheel" @focusout="resyncInputText">
+			<VueDatePicker
+				v-model="timeModel"
+				time-picker
+				auto-apply
+				teleport
+				:input-attrs="{ id: 'start-time', clearable: false }"
+				:aria-labels="{
+					input: $t('time.startTime'),
+					incrementValue: (type) =>
+						type === 'hours'
+							? $t('time.increaseHour')
+							: $t('time.increaseMinute', { step: MINUTE_STEP }),
+					decrementValue: (type) =>
+						type === 'hours'
+							? $t('time.decreaseHour')
+							: $t('time.decreaseMinute', { step: MINUTE_STEP }),
+				}"
+				:time-config="{
+					is24: true,
+					minutesIncrement: MINUTE_STEP,
+					minutesGridIncrement: MINUTE_GRID_STEP,
+				}"
+				:formats="{ input: 'HH:mm' }"
+				:text-input="{
+					format: parseTimeInput,
+					enterSubmit: true,
+					tabSubmit: true,
+					applyOnBlur: true,
+					selectOnFocus: true,
+				}"
+				@menu-mounted="attachWheel"
+				@menu-unmounted="detachWheel"
+			>
+				<template #input-icon>
+					<ClockIcon class="dp-clock-icon" />
+				</template>
+			</VueDatePicker>
+		</div>
 		<div class="preset-row">
 			<button
 				v-for="preset in presets"
@@ -54,7 +75,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { VueDatePicker } from '@vuepic/vue-datepicker'
 import ClockIcon from './icons/ClockIcon.vue'
 
@@ -76,25 +97,134 @@ const presets = ['08:00', '08:30', '09:00', '09:30', '10:00']
 // 화살표 버튼은 1분, 분 오버레이 그리드는 5분 간격(1분이면 셀 60개라 고르기 힘듦)
 const MINUTE_STEP = 1
 const MINUTE_GRID_STEP = 5
+const MINUTES_PER_HOUR = 60
+const MINUTES_PER_DAY = 24 * MINUTES_PER_HOUR
 
 const pad = (value) => String(value).padStart(2, '0')
+
+const isValidTime = (hours, minutes) =>
+	Number.isInteger(hours) &&
+	Number.isInteger(minutes) &&
+	hours >= 0 &&
+	hours <= 23 &&
+	minutes >= 0 &&
+	minutes <= 59
+
+// 라이브러리 기본 파서는 '99:99' 같은 값을 조용히 09:00으로 정규화해 버린다.
+// 파싱 전에 원문을 직접 검사해서, 실제로 존재하는 시각일 때만 Date를 돌려준다.
+const parseTimeInput = (text) => {
+	const match = /^(\d{1,2}):(\d{2})$/.exec(String(text).trim())
+	if (!match) return null
+
+	const hours = Number(match[1])
+	const minutes = Number(match[2])
+	if (!isValidTime(hours, minutes)) return null
+
+	const date = new Date()
+	date.setHours(hours, minutes, 0, 0)
+	return date
+}
+
+// 무효한 글자를 남긴 채 포커스를 잃으면 표시와 실제 값이 어긋나므로 되돌린다.
+// 라이브러리도 blur를 처리하므로 다음 틱으로 미뤄 순서 의존을 없앤다.
+const resyncInputText = (event) => {
+	const wrap = event.currentTarget
+	setTimeout(() => {
+		const input = wrap.querySelector('.dp--input')
+		if (input && input.value !== props.modelValue) {
+			input.value = props.modelValue
+		}
+	}, 0)
+}
 
 // VueDatePicker의 time-picker 모드는 { hours, minutes } 객체를 다루므로
 // 저장 포맷인 'HH:mm' 문자열과 양방향으로 변환
 const timeModel = computed({
 	get() {
 		const [hours, minutes] = props.modelValue.split(':').map(Number)
-		if (Number.isNaN(hours) || Number.isNaN(minutes)) return null
+		if (!isValidTime(hours, minutes)) return null
 		return { hours, minutes }
 	},
 	set(value) {
 		if (!value) return
 
-		const next = `${pad(value.hours)}:${pad(value.minutes)}`
+		const hours = Number(value.hours)
+		const minutes = Number(value.minutes)
+		if (!isValidTime(hours, minutes)) return
+
+		const next = `${pad(hours)}:${pad(minutes)}`
 		emit('update:modelValue', next)
 		emit('change', next)
 	},
 })
+
+// 자정을 넘기면 하루 안에서 순환
+const adjustTime = (deltaMinutes) => {
+	const current = timeModel.value
+	if (!current) return
+
+	const total =
+		(((current.hours * MINUTES_PER_HOUR + current.minutes + deltaMinutes) %
+			MINUTES_PER_DAY) +
+			MINUTES_PER_DAY) %
+		MINUTES_PER_DAY
+
+	timeModel.value = {
+		hours: Math.floor(total / MINUTES_PER_HOUR),
+		minutes: total % MINUTES_PER_HOUR,
+	}
+}
+
+// 메뉴는 body로 teleport 되어 템플릿 @wheel이 닿지 않으므로
+// 라이브러리가 주는 menu-mounted 훅에서 시/분 컬럼에 직접 건다
+let removeWheelListeners = null
+
+const attachWheel = (menuEl) => {
+	detachWheel()
+
+	// .dp--time-col에는 시/분 사이의 ':' 구분자 칸도 포함되므로
+	// 증감 버튼을 가진 칸만 남긴다. 그러면 순서가 시, 분이 된다.
+	const columns = [...menuEl.querySelectorAll('.dp--time-col')].filter((column) =>
+		column.querySelector('.dp--inc-dec-button'),
+	)
+	const steps = [MINUTES_PER_HOUR, MINUTE_STEP]
+	const offs = []
+
+	columns.forEach((column, index) => {
+		const step = steps[index]
+		if (!step) return
+
+		const onWheel = (event) => {
+			// 팝오버 위에서는 페이지가 같이 스크롤되지 않아야 함
+			event.preventDefault()
+			adjustTime(event.deltaY < 0 ? step : -step)
+		}
+
+		column.addEventListener('wheel', onWheel, { passive: false })
+		offs.push(() => column.removeEventListener('wheel', onWheel))
+	})
+
+	removeWheelListeners = () => offs.forEach((off) => off())
+}
+
+// 입력 필드 위 스크롤. 포커스가 있을 때만 동작시켜,
+// 그냥 페이지를 넘기려던 스크롤이 시간을 바꿔버리는 일을 막는다
+const handleInputWheel = (event) => {
+	const input = event.currentTarget.querySelector('.dp--input')
+	if (!input || document.activeElement !== input) return
+
+	event.preventDefault()
+	adjustTime(event.deltaY < 0 ? MINUTE_STEP : -MINUTE_STEP)
+}
+
+const detachWheel = () => {
+	if (!removeWheelListeners) return
+	removeWheelListeners()
+	removeWheelListeners = null
+}
+
+// 메뉴가 열린 채로 컴포넌트가 사라지면 menu-unmounted가 안 올 수 있음
+onUnmounted(detachWheel)
 
 const selectPreset = (preset) => {
 	emit('update:modelValue', preset)
@@ -154,6 +284,10 @@ const handleHalfDayChange = (event) => {
 
 .input-section :deep(.dp--input-icon-pad) {
 	padding-left: var(--dp-input-icon-padding);
+}
+
+.picker-wrap {
+	display: contents;
 }
 
 .dp-clock-icon {

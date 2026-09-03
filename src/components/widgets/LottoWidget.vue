@@ -1,6 +1,6 @@
 <template>
 	<div class="widget-card accent-amber">
-		<WidgetHeader icon="🎱" title="로또 번호 생성기" />
+		<WidgetHeader icon="🎱" :title="$t('lotto.title')" />
 		<div v-if="numbers.length" class="lotto-balls">
 			<span
 				v-for="(n, index) in numbers"
@@ -10,9 +10,11 @@
 				>{{ n }}</span
 			>
 		</div>
-		<p v-else class="lotto-empty">번호 생성 버튼을 눌러보세요</p>
-		<button type="button" class="btn-solid" @click="handleGenerate">번호 생성</button>
-		<p class="lotto-disclaimer">당첨을 예측하지 않는 재미용 랜덤 생성기입니다</p>
+		<p v-else class="lotto-empty">{{ $t('lotto.empty') }}</p>
+		<button type="button" class="btn-solid" @click="handleGenerate">
+			{{ $t('lotto.generate') }}
+		</button>
+		<p class="lotto-disclaimer">{{ $t('lotto.disclaimer') }}</p>
 	</div>
 </template>
 

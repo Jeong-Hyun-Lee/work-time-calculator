@@ -1,0 +1,75 @@
+export default {
+	app: {
+		title: 'Clock-Out Timer',
+		subtitle: 'Enter your start time, we handle the rest',
+		language: 'Language',
+	},
+	time: {
+		startTime: 'Start time',
+		currentTime: 'Current time',
+		endTime: 'Clock-out time',
+		halfDay: 'Half day',
+		// dayjs format string
+		format: 'HH:mm',
+		empty: '--:--',
+		increaseHour: 'Increase start time by 1 hour',
+		decreaseHour: 'Decrease start time by 1 hour',
+		increaseMinute: 'Increase start time by {step} minutes',
+		decreaseMinute: 'Decrease start time by {step} minutes',
+	},
+	countdown: {
+		label: 'Time until clock-out',
+		overdueLabel: 'Overtime so far',
+		hour: 'hours',
+		minute: 'min',
+		second: 'sec',
+		copy: 'Copy',
+		copied: 'Copied!',
+		copyAria: 'Copy remaining time as text',
+		copyAriaOverdue: 'Copy overtime as text',
+		copyText: '{h}h {m}m {s}s until clock-out',
+		copyTextOverdue: '{h}h {m}m {s}s of overtime',
+	},
+	lotto: {
+		title: 'Lucky Number Picker',
+		empty: 'Press the button to draw numbers',
+		generate: 'Draw numbers',
+		disclaimer: 'A random picker for fun. It does not predict any results.',
+	},
+	quote: {
+		title: 'Note of the Day',
+		next: 'Show another',
+		disclaimer: 'Just for fun. Not a horoscope or any kind of prediction.',
+	},
+	lunch: {
+		title: 'Lunch Roulette',
+		empty: 'Give the wheel a spin',
+		spin: 'Spin the wheel',
+	},
+	ladder: {
+		title: 'Ladder Draw',
+		namesAria: 'Participant names',
+		namesPlaceholder: 'Participants (comma separated, 2-8)\ne.g. Alex, Sam, Jordan',
+		prizesAria: 'Outcome list',
+		prizesPlaceholder: 'Outcomes (leave blank for 1 winner, rest lose)\ne.g. Coffee, Miss, Miss',
+		generate: 'Build ladder',
+		errorMin: 'Enter at least 2 participants',
+		errorMax: 'You can enter up to {max} participants',
+		errorCount: 'The number of outcomes must match the number of participants',
+		win: 'Winner',
+		lose: 'Miss',
+	},
+	notification: {
+		title: 'Clock-Out Timer',
+		hoursLeft: '{emoji} {hours} hours left until clock-out!',
+		confirm: 'OK',
+	},
+	seo: {
+		title: 'Clock-Out Timer - Know exactly when your workday ends',
+		description:
+			'A free web app that calculates your clock-out time from your start time. Half-day option and a live countdown included.',
+		keywords:
+			'clock out time, work hours calculator, shift end calculator, workday countdown, half day, office worker',
+		ogLocale: 'en_US',
+	},
+}

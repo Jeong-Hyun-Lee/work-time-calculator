@@ -1,11 +1,11 @@
 <template>
 	<div class="widget-card accent-sky">
-		<WidgetHeader icon="🍱" title="점심 메뉴 룰렛" />
+		<WidgetHeader icon="🍱" :title="$t('lunch.title')" />
 		<p class="roulette-result" :class="{ spinning: isSpinning }">
-			{{ result || '룰렛을 돌려보세요' }}
+			{{ result || $t('lunch.empty') }}
 		</p>
 		<button type="button" class="btn-solid" :disabled="isSpinning" @click="spin">
-			룰렛 돌리기
+			{{ $t('lunch.spin') }}
 		</button>
 	</div>
 </template>

@@ -1,0 +1,75 @@
+export default {
+	app: {
+		title: '退勤時間計算機',
+		subtitle: '出勤時間を入れるだけ、あとはおまかせ',
+		language: '言語',
+	},
+	time: {
+		startTime: '出勤時間',
+		currentTime: '現在時刻',
+		endTime: '退勤時間',
+		halfDay: '半休',
+		// dayjs フォーマット文字列
+		format: 'HH時mm分',
+		empty: '--:--',
+		increaseHour: '出勤時間を1時間進める',
+		decreaseHour: '出勤時間を1時間戻す',
+		increaseMinute: '出勤時間を{step}分進める',
+		decreaseMinute: '出勤時間を{step}分戻す',
+	},
+	countdown: {
+		label: '退勤までの残り時間',
+		overdueLabel: '残業時間',
+		hour: '時間',
+		minute: '分',
+		second: '秒',
+		copy: 'コピー',
+		copied: 'コピーしました',
+		copyAria: '残り時間をテキストでコピー',
+		copyAriaOverdue: '残業時間をテキストでコピー',
+		copyText: '退勤まで{h}時間{m}分{s}秒',
+		copyTextOverdue: '残業{h}時間{m}分{s}秒',
+	},
+	lotto: {
+		title: 'ラッキーナンバー',
+		empty: 'ボタンを押して番号を出しましょう',
+		generate: '番号を出す',
+		disclaimer: '当選を予測しない、遊び用のランダム生成です',
+	},
+	quote: {
+		title: '今日のひとこと',
+		next: '別のことばを見る',
+		disclaimer: '娯楽用のコンテンツで、占いとは関係ありません',
+	},
+	lunch: {
+		title: 'ランチルーレット',
+		empty: 'ルーレットを回してみましょう',
+		spin: 'ルーレットを回す',
+	},
+	ladder: {
+		title: 'あみだくじ',
+		namesAria: '参加者の名前',
+		namesPlaceholder: '参加者（カンマ区切り、2〜8人）\n例: たろう, はなこ, けん',
+		prizesAria: '結果リスト',
+		prizesPlaceholder: '結果（空欄なら当たり1つ、他はハズレ）\n例: コーヒー, ハズレ, ハズレ',
+		generate: 'あみだくじを作る',
+		errorMin: '参加者を2人以上入力してください',
+		errorMax: '参加者は最大{max}人まで入力できます',
+		errorCount: '結果の数を参加者の数と同じにしてください',
+		win: '当たり',
+		lose: 'ハズレ',
+	},
+	notification: {
+		title: '退勤時間計算機',
+		hoursLeft: '{emoji} 退勤まであと{hours}時間です',
+		confirm: '確認',
+	},
+	seo: {
+		title: '退勤時間計算機 - 出勤時間から退勤時間を自動計算',
+		description:
+			'出勤時間を入力すると退勤時間を自動で計算する無料ウェブアプリです。半休オプションとリアルタイムのカウントダウンに対応しています。',
+		keywords:
+			'退勤時間 計算, 勤務時間 計算, 退勤 カウントダウン, 半休, 会社員, 労働時間',
+		ogLocale: 'ja_JP',
+	},
+}

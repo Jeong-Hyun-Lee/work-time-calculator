@@ -2,23 +2,23 @@
 	<div class="countdown-section widget-card widget-card--dark" :class="stateClass">
 		<div v-if="diffInSeconds > 0" class="countdown">
 			<div class="countdown-icon">⏳</div>
-			<div class="countdown-label">퇴근기모리장단까지 남은 시간</div>
+			<div class="countdown-label">{{ $t('countdown.label') }}</div>
 			<div class="countdown-value">
 				<span class="time-unit">
 					<span class="number">{{ String(hours).padStart(2, '0') }}</span>
-					<span class="unit">시간</span>
+					<span class="unit">{{ $t('countdown.hour') }}</span>
 				</span>
 				<span class="separator">:</span>
 				<span class="time-unit">
 					<span class="number">{{ String(minutes).padStart(2, '0') }}</span>
-					<span class="unit">분</span>
+					<span class="unit">{{ $t('countdown.minute') }}</span>
 				</span>
 				<span class="separator">:</span>
 				<span class="time-unit">
 					<span class="number">{{
 						String(remainingSeconds).padStart(2, '0')
 					}}</span>
-					<span class="unit">초</span>
+					<span class="unit">{{ $t('countdown.second') }}</span>
 				</span>
 			</div>
 			<div class="countdown-progress">
@@ -27,34 +27,34 @@
 			<button
 				type="button"
 				class="btn-outline-inverse copy-btn"
-				:aria-label="copyLabel"
+				:aria-label="$t('countdown.copyAria')"
 				@click="copyRemainingTime"
 			>
 				<span class="copy-icon" :class="{ copied: justCopied }">
 					{{ justCopied ? '✓' : '📋' }}
 				</span>
-				<span class="copy-text">{{ justCopied ? '복사됨!' : '복사' }}</span>
+				<span class="copy-text">{{ justCopied ? $t('countdown.copied') : $t('countdown.copy') }}</span>
 			</button>
 		</div>
 		<div v-else class="countdown overdue">
 			<div class="countdown-icon">🎉</div>
-			<div class="countdown-label">야근 시간 경과</div>
+			<div class="countdown-label">{{ $t('countdown.overdueLabel') }}</div>
 			<div class="countdown-value">
 				<span class="time-unit">
 					<span class="number">{{
 						String(overdueHours).padStart(2, '0')
 					}}</span>
-					<span class="unit">시간</span>
+					<span class="unit">{{ $t('countdown.hour') }}</span>
 				</span>
 				<span class="separator">:</span>
 				<span class="time-unit">
 					<span class="number">{{ String(overdueMins).padStart(2, '0') }}</span>
-					<span class="unit">분</span>
+					<span class="unit">{{ $t('countdown.minute') }}</span>
 				</span>
 				<span class="separator">:</span>
 				<span class="time-unit">
 					<span class="number">{{ String(overdueSecs).padStart(2, '0') }}</span>
-					<span class="unit">초</span>
+					<span class="unit">{{ $t('countdown.second') }}</span>
 				</span>
 			</div>
 			<div class="countdown-progress">
@@ -63,13 +63,13 @@
 			<button
 				type="button"
 				class="btn-outline-inverse copy-btn"
-				:aria-label="copyLabelOverdue"
+				:aria-label="$t('countdown.copyAriaOverdue')"
 				@click="copyOverdueTime"
 			>
 				<span class="copy-icon" :class="{ copied: justCopied }">
 					{{ justCopied ? '✓' : '📋' }}
 				</span>
-				<span class="copy-text">{{ justCopied ? '복사됨!' : '복사' }}</span>
+				<span class="copy-text">{{ justCopied ? $t('countdown.copied') : $t('countdown.copy') }}</span>
 			</button>
 		</div>
 	</div>
@@ -77,12 +77,12 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const justCopied = ref(false)
 let copyTimeout = null
 
-const copyLabel = '남은 시간 텍스트 복사'
-const copyLabelOverdue = '야근 시간 텍스트 복사'
+const { t } = useI18n()
 
 function copyToClipboard(text) {
 	if (copyTimeout) clearTimeout(copyTimeout)
@@ -101,14 +101,14 @@ function copyRemainingTime() {
 	const h = String(props.hours).padStart(2, '0')
 	const m = String(props.minutes).padStart(2, '0')
 	const s = String(props.remainingSeconds).padStart(2, '0')
-	copyToClipboard(`퇴근기모리장단까지 ${h}시간 ${m}분 ${s}초`)
+	copyToClipboard(t('countdown.copyText', { h, m, s }))
 }
 
 function copyOverdueTime() {
 	const h = String(props.overdueHours).padStart(2, '0')
 	const m = String(props.overdueMins).padStart(2, '0')
 	const s = String(props.overdueSecs).padStart(2, '0')
-	copyToClipboard(`야근 시간 ${h}시간 ${m}분 ${s}초`)
+	copyToClipboard(t('countdown.copyTextOverdue', { h, m, s }))
 }
 
 const props = defineProps({

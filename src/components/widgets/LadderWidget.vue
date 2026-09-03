@@ -1,25 +1,27 @@
 <template>
 	<div class="widget-card accent-violet">
-		<WidgetHeader icon="🪜" title="사다리타기" />
+		<WidgetHeader icon="🪜" :title="$t('ladder.title')" />
 
 		<div class="ladder-inputs">
 			<textarea
 				v-model="namesInput"
 				class="ladder-input"
-				aria-label="참가자 이름"
-				placeholder="참가자 (쉼표 구분, 2~8명)&#10;예: 철수, 영희, 민수"
+				:aria-label="$t('ladder.namesAria')"
+				:placeholder="$t('ladder.namesPlaceholder')"
 				rows="3"
 			></textarea>
 			<textarea
 				v-model="prizesInput"
 				class="ladder-input"
-				aria-label="결과 목록"
-				placeholder="결과 (비우면 당첨 1개 + 나머지 꽝)&#10;예: 커피, 꽝, 꽝"
+				:aria-label="$t('ladder.prizesAria')"
+				:placeholder="$t('ladder.prizesPlaceholder')"
 				rows="3"
 			></textarea>
 		</div>
 
-		<button type="button" class="btn-solid" @click="generate">사다리 만들기</button>
+		<button type="button" class="btn-solid" @click="generate">
+			{{ $t('ladder.generate') }}
+		</button>
 
 		<p v-if="error" class="ladder-error" role="alert">{{ error }}</p>
 

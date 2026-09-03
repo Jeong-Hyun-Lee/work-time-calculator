@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { t } from '../i18n'
 
 const ROWS = 10
 const MAX_PLAYERS = 8
@@ -80,14 +81,14 @@ export function useLadder() {
 		const parsedPlayers = parseList(namesInput.value)
 
 		if (parsedPlayers.length < 2) {
-			error.value = '참가자를 2명 이상 입력해주세요'
+			error.value = t('ladder.errorMin')
 			results.value = []
 			players.value = []
 			return
 		}
 
 		if (parsedPlayers.length > MAX_PLAYERS) {
-			error.value = `참가자는 최대 ${MAX_PLAYERS}명까지 입력할 수 있어요`
+			error.value = t('ladder.errorMax', { max: MAX_PLAYERS })
 			results.value = []
 			players.value = []
 			return
@@ -96,7 +97,7 @@ export function useLadder() {
 		const parsedPrizes = parseList(prizesInput.value)
 
 		if (parsedPrizes.length > 0 && parsedPrizes.length !== parsedPlayers.length) {
-			error.value = '결과 개수가 참가자 수와 같아야 해요'
+			error.value = t('ladder.errorCount')
 			results.value = []
 			players.value = []
 			return
@@ -106,7 +107,9 @@ export function useLadder() {
 		const finalPrizes =
 			parsedPrizes.length > 0
 				? parsedPrizes
-				: parsedPlayers.map((_, index) => (index === 0 ? '당첨' : '꽝'))
+				: parsedPlayers.map((_, index) =>
+						index === 0 ? t('ladder.win') : t('ladder.lose'),
+					)
 
 		// 결과 자체도 섞어서 어느 칸이 당첨인지 알 수 없게 함
 		const shuffledPrizes = [...finalPrizes]

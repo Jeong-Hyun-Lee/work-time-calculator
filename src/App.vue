@@ -11,10 +11,14 @@ import LunchRouletteWidget from './components/widgets/LunchRouletteWidget.vue'
 import LadderWidget from './components/widgets/LadderWidget.vue'
 import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.vue'
 import { useTimeCalculation } from './composables/useTimeCalculation'
+import { useSEO } from './composables/useSEO'
+import { locale, isKoreaOnlyLocale, t } from './i18n'
 import {
 	registerServiceWorker,
 	useHourlyNotification,
 } from './composables/useNotification'
+
+useSEO()
 
 const startTime = useStorage('startTime', '09:55')
 const isHalfDay = useStorage('isHalfDay', false)
@@ -45,7 +49,7 @@ const { checkHourlyNotification, resetNotifiedHours } = useHourlyNotification(
 
 // useWebNotification을 사용하여 권한 확인
 const notification = useWebNotification({
-	title: '퇴근시간 계산기',
+	title: t('notification.title'),
 	body: '',
 })
 
@@ -116,13 +120,13 @@ onUnmounted(() => {
 		</div>
 
 		<div class="tile tile--2">
-			<StatTile label="출근 시간" :value="formattedStartTime" />
+			<StatTile :label="$t('time.startTime')" :value="formattedStartTime" />
 		</div>
 		<div class="tile tile--2">
-			<StatTile label="현재 시간" :value="formattedCurrentTime" />
+			<StatTile :label="$t('time.currentTime')" :value="formattedCurrentTime" />
 		</div>
 		<div class="tile tile--2">
-			<StatTile label="퇴근 시간" :value="formattedEndTime" dark />
+			<StatTile :label="$t('time.endTime')" :value="formattedEndTime" dark />
 		</div>
 
 		<div class="tile tile--6">
@@ -139,7 +143,8 @@ onUnmounted(() => {
 			<LadderWidget />
 		</div>
 
-		<div class="tile tile--12">
+		<!-- 한국 4대보험·누진세율 기반이라 다른 로케일에서는 틀린 값이 됨 -->
+		<div v-if="isKoreaOnlyLocale(locale)" class="tile tile--12">
 			<SalaryCalculatorWidget />
 		</div>
 	</main>

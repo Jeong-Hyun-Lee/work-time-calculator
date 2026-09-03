@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue'
 import dayjs from 'dayjs'
+import { t } from '../i18n'
 
 export function useTimeCalculation(startTime, isHalfDay) {
 	const currentTime = ref(dayjs())
@@ -7,21 +8,21 @@ export function useTimeCalculation(startTime, isHalfDay) {
 	const diffInSeconds = ref(0)
 
 	const formattedStartTime = computed(() => {
-		if (!startTime.value) return '--:--'
+		if (!startTime.value) return t('time.empty')
 		const [hours, minutes] = startTime.value.split(':')
 		return dayjs()
 			.hour(parseInt(hours))
 			.minute(parseInt(minutes))
-			.format('HH시 mm분')
+			.format(t('time.format'))
 	})
 
 	const formattedCurrentTime = computed(() => {
-		return currentTime.value.format('HH시 mm분')
+		return currentTime.value.format(t('time.format'))
 	})
 
 	const formattedEndTime = computed(() => {
-		if (!endTime.value) return '--:--'
-		return endTime.value.format('HH시 mm분')
+		if (!endTime.value) return t('time.empty')
+		return endTime.value.format(t('time.format'))
 	})
 
 	const hours = computed(() => {

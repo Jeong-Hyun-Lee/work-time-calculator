@@ -1,43 +1,56 @@
 <template>
 	<div class="widget-card">
-		<WidgetHeader icon="💰" title="연봉 실수령액 계산기" />
+		<WidgetHeader icon="💰" :title="$t('salary.title')" />
 		<div class="salary-input-row">
 			<input
 				v-model="annualSalaryInput"
 				type="number"
 				min="0"
-				placeholder="세전 연봉 (만원)"
+				:placeholder="$t('salary.placeholder')"
 				class="salary-input"
-				aria-label="세전 연봉 (만원)"
+				:aria-label="$t('salary.placeholder')"
 				@keyup.enter="calculate"
 			/>
-			<button type="button" class="btn-solid" @click="calculate">계산하기</button>
+			<button type="button" class="btn-solid" @click="calculate">
+				{{ $t('salary.calculate') }}
+			</button>
 		</div>
 		<div v-if="result" class="salary-result">
 			<div class="salary-net">
-				<span class="salary-net-label">월 실수령액</span>
-				<span class="salary-net-value">{{ formatWon(result.netPay) }}원</span>
+				<span class="salary-net-label">{{ $t('salary.netLabel') }}</span>
+				<span class="salary-net-value">{{ formatWon(result.netPay) }}{{ $t('salary.currency') }}</span>
 			</div>
 			<ul class="salary-breakdown">
-				<li><span>국민연금</span><span>{{ formatWon(result.nationalPension) }}원</span></li>
-				<li><span>건강보험</span><span>{{ formatWon(result.healthInsurance) }}원</span></li>
-				<li><span>장기요양보험</span><span>{{ formatWon(result.longTermCare) }}원</span></li>
-				<li><span>고용보험</span><span>{{ formatWon(result.employmentInsurance) }}원</span></li>
-				<li><span>소득세</span><span>{{ formatWon(result.incomeTax) }}원</span></li>
-				<li><span>지방소득세</span><span>{{ formatWon(result.localTax) }}원</span></li>
+				<li v-for="row in breakdown" :key="row.key">
+					<span>{{ $t('salary.' + row.key) }}</span>
+					<span>{{ formatWon(row.value) }}{{ $t('salary.currency') }}</span>
+				</li>
 			</ul>
 		</div>
-		<p class="salary-disclaimer">
-			2026년 요율 기준 참고용 계산이며(부양가족·비과세액·근로소득세액공제 미반영, 간이세액표 아닌 누진세율 근사), 실제 급여와 다를 수 있습니다.
-		</p>
+		<p class="salary-disclaimer">{{ $t('salary.disclaimer') }}</p>
 	</div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import WidgetHeader from '../WidgetHeader.vue'
 import { useSalaryCalculator } from '../../composables/useSalaryCalculator'
 
 const { annualSalaryInput, result, calculate } = useSalaryCalculator()
+
+// 공제 항목 라벨은 salary.* 키와 1:1로 대응
+const breakdown = computed(() =>
+	result.value
+		? [
+				{ key: 'pension', value: result.value.nationalPension },
+				{ key: 'health', value: result.value.healthInsurance },
+				{ key: 'longTermCare', value: result.value.longTermCare },
+				{ key: 'employment', value: result.value.employmentInsurance },
+				{ key: 'incomeTax', value: result.value.incomeTax },
+				{ key: 'localTax', value: result.value.localTax },
+			]
+		: [],
+)
 
 function formatWon(value) {
 	return value.toLocaleString('ko-KR')

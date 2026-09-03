@@ -4,14 +4,30 @@
 			<span class="app-header-icon">
 				<ClockIcon />
 			</span>
-			<h1>퇴근시간 계산기</h1>
-			<p class="subtitle">출근 시간만 넣으면 나머지는 알아서</p>
+			<h1>{{ $t('app.title') }}</h1>
+			<p class="subtitle">{{ $t('app.subtitle') }}</p>
+			<select
+				class="locale-select"
+				:value="locale"
+				:aria-label="$t('app.language')"
+				@change="setLocale($event.target.value)"
+			>
+				<option v-for="code in SUPPORTED_LOCALES" :key="code" :value="code">
+					{{ LOCALE_LABELS[code] }}
+				</option>
+			</select>
 		</div>
 	</header>
 </template>
 
 <script setup>
 import ClockIcon from './icons/ClockIcon.vue'
+import {
+	locale,
+	setLocale,
+	SUPPORTED_LOCALES,
+	LOCALE_LABELS,
+} from '../i18n'
 </script>
 
 <style scoped>
@@ -68,9 +84,40 @@ h1 {
 	color: rgba(255, 255, 255, 0.8);
 }
 
+.locale-select {
+	flex-shrink: 0;
+	padding: var(--spacing-4) var(--spacing-8);
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	border-radius: var(--radius-control);
+	background: rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+	font-family: var(--font-sans);
+	font-size: var(--text-caption);
+	cursor: pointer;
+}
+
+.locale-select:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.locale-select:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: 2px;
+}
+
+/* 드롭다운 목록은 브라우저가 그리므로 페이지 배경을 못 씀 */
+.locale-select option {
+	color: var(--color-ink);
+	background: #ffffff;
+}
+
 @media (max-width: 600px) {
 	.subtitle {
 		display: none;
+	}
+
+	.locale-select {
+		margin-left: auto;
 	}
 }
 </style>
