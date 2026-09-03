@@ -51,8 +51,8 @@
 					applyOnBlur: true,
 					selectOnFocus: true,
 				}"
-				@menu-mounted="attachWheel"
-				@menu-unmounted="detachWheel"
+				@menu-mounted="bindMenu"
+				@menu-unmounted="unbindMenu"
 			>
 				<template #input-icon>
 					<ClockIcon class="dp-clock-icon" />
@@ -175,56 +175,75 @@ const adjustTime = (deltaMinutes) => {
 	}
 }
 
-// 메뉴는 body로 teleport 되어 템플릿 @wheel이 닿지 않으므로
-// 라이브러리가 주는 menu-mounted 훅에서 시/분 컬럼에 직접 건다
-let removeWheelListeners = null
+const menuInput = () => document.getElementById('start-time')
 
-const attachWheel = (menuEl) => {
-	detachWheel()
-
-	// .dp--time-col에는 시/분 사이의 ':' 구분자 칸도 포함되므로
-	// 증감 버튼을 가진 칸만 남긴다. 그러면 순서가 시, 분이 된다.
-	const columns = [...menuEl.querySelectorAll('.dp--time-col')].filter((column) =>
-		column.querySelector('.dp--inc-dec-button'),
-	)
-	const steps = [MINUTES_PER_HOUR, MINUTE_STEP]
-	const offs = []
-
-	columns.forEach((column, index) => {
-		const step = steps[index]
-		if (!step) return
-
-		const onWheel = (event) => {
-			// 팝오버 위에서는 페이지가 같이 스크롤되지 않아야 함
-			event.preventDefault()
-			adjustTime(event.deltaY < 0 ? step : -step)
-		}
-
-		column.addEventListener('wheel', onWheel, { passive: false })
-		offs.push(() => column.removeEventListener('wheel', onWheel))
-	})
-
-	removeWheelListeners = () => offs.forEach((off) => off())
-}
-
-// 입력 필드 위 스크롤. 포커스가 있을 때만 동작시켜,
+// 입력 영역 위 스크롤. 포커스가 있을 때만 동작시켜,
 // 그냥 페이지를 넘기려던 스크롤이 시간을 바꿔버리는 일을 막는다
 const handleInputWheel = (event) => {
-	const input = event.currentTarget.querySelector('.dp--input')
+	if (!event.target.closest('.dp--input-wrap')) return
+
+	const input = menuInput()
 	if (!input || document.activeElement !== input) return
 
 	event.preventDefault()
 	adjustTime(event.deltaY < 0 ? MINUTE_STEP : -MINUTE_STEP)
 }
 
-const detachWheel = () => {
-	if (!removeWheelListeners) return
-	removeWheelListeners()
-	removeWheelListeners = null
+// 메뉴는 body로 teleport 되어 템플릿 @wheel이 닿지 않으므로
+// 라이브러리가 주는 menu-mounted 훅에서 직접 건다
+let removeMenuListeners = null
+
+const bindMenu = (menuEl) => {
+	unbindMenu()
+
+	// .dp--time-col에는 시/분 사이의 ':' 구분자 칸도 포함되므로
+	// 증감 버튼을 가진 칸만 남긴다. 그러면 첫 칸이 시, 둘째가 분이다.
+	const [hourColumn] = [...menuEl.querySelectorAll('.dp--time-col')].filter((column) =>
+		column.querySelector('.dp--inc-dec-button'),
+	)
+
+	// 칸 위가 아니어도 메뉴 어디서든 굴릴 수 있게 달력 컨테이너에 위임한다
+	const wheelTarget = menuEl.querySelector('.dp--instance-calendar') ?? menuEl
+
+	const onWheel = (event) => {
+		// 팝오버 위에서는 페이지가 같이 스크롤되지 않아야 함
+		event.preventDefault()
+
+		const overHour =
+			hourColumn && event.target.closest('.dp--time-col') === hourColumn
+		const step = overHour ? MINUTES_PER_HOUR : MINUTE_STEP
+		adjustTime(event.deltaY < 0 ? step : -step)
+	}
+
+	// textInput을 켜면 라이브러리가 입력 텍스트 상태를 따로 들고 있다.
+	// 타이핑을 안 했으면 그게 비어 있어 메뉴를 클릭하는 순간 "현재 시각"으로
+	// 리셋되고, 타이핑 중이면 무효한 중간값('10:2')을 제멋대로 해석해 둔다.
+	// 어느 쪽이든 클릭이 처리되기 전(capture 단계)에 모델 값을 다시 심는다.
+	const onMouseDownCapture = () => {
+		const input = menuInput()
+		if (!input) return
+
+		input.value = props.modelValue
+		input.dispatchEvent(new Event('input', { bubbles: true }))
+	}
+
+	wheelTarget.addEventListener('wheel', onWheel, { passive: false })
+	menuEl.addEventListener('mousedown', onMouseDownCapture, true)
+
+	removeMenuListeners = () => {
+		wheelTarget.removeEventListener('wheel', onWheel)
+		menuEl.removeEventListener('mousedown', onMouseDownCapture, true)
+	}
+}
+
+const unbindMenu = () => {
+	if (!removeMenuListeners) return
+	removeMenuListeners()
+	removeMenuListeners = null
 }
 
 // 메뉴가 열린 채로 컴포넌트가 사라지면 menu-unmounted가 안 올 수 있음
-onUnmounted(detachWheel)
+onUnmounted(unbindMenu)
 
 const selectPreset = (preset) => {
 	emit('update:modelValue', preset)
