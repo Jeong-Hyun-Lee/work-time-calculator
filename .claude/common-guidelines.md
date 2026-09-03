@@ -1,8 +1,18 @@
 # 공통 개발 지침 (템플릿)
 
-흔한 LLM 코딩 실수를 줄이기 위한 행동 지침 + Claude Code 도구 사용 취향. 프로젝트 특성과 무관해서 다른 레포에 그대로 복사해 재사용 가능. work-time-calculator 고유 내용(스택/명령/위키/gotchas)은 프로젝트 루트 `CLAUDE.md`에 있음.
+흔한 LLM 코딩 실수를 줄이기 위한 행동 지침 + Claude Code 도구 사용 취향. 프로젝트 특성과 무관해서 다른 레포에 그대로 복사해 재사용 가능. 고유 내용(스택/명령/위키/gotchas)은 프로젝트 루트 `CLAUDE.md`에 있음.
 
 **트레이드오프:** 이 지침은 속도보다 신중함에 무게를 둠. 사소한 작업은 판단에 맡김.
+
+## 필요한 플러그인
+
+아래 섹션들이 전제하는 플러그인. `/plugin marketplace add <repo>` 후 `/plugin install <name>@<marketplace>`로 설치.
+
+- **caveman** — Caveman 모드 섹션. 마켓플레이스: GitHub `JuliusBrussee/caveman`.
+- **ponytail** — Ponytail 플러그인 지침 섹션. 마켓플레이스: GitHub `DietrichGebert/ponytail`.
+- **ecc** — 에이전트 팀 섹션의 `ecc:team-builder` 등. 마켓플레이스: `https://github.com/affaan-m/ECC.git`.
+- **claude-team-orchestration** — 에이전트 팀 섹션의 `swarm:team-management`/`swarm:orchestration-patterns`/`swarm:messaging`/`swarm:task-system`. 마켓플레이스: GitHub `zircote-plugins/claude-team-orchestration`.
+- **superpowers** — Superpowers 플러그인 지침 섹션. 마켓플레이스: GitHub `obra/superpowers-marketplace`.
 
 ## 코딩 전에 생각하기
 
@@ -100,3 +110,14 @@
 ## Ponytail 플러그인 지침
 
 코드 작성/수정 작업에는 `ponytail` 플러그인을 사용하세요. 불필요한 추상화, 미리 만드는 보일러플레이트, 과도한 설정 옵션 없이 최소한의 동작 코드를 우선합니다. 표준 라이브러리/기존 코드베이스 재사용 > 새 구현 순서를 따르고, 의도적으로 단순화한 부분은 한계와 확장 지점을 짧게 남기세요.
+
+## Superpowers 플러그인 지침
+
+작업 시작 전 관련 스킬 있으면 반드시 사용 — 특히 프로세스 스킬을 구현 스킬보다 먼저 적용:
+
+- 새 기능/변경 착수 전: `superpowers:brainstorming` — 요구사항·의도 먼저 탐색, 바로 구현 안 함.
+- 버그·테스트 실패·예상 밖 동작: `superpowers:systematic-debugging` — 원인 규명 먼저, 바로 고치지 않음.
+- 스펙/요구사항 있는 다단계 작업: `superpowers:writing-plans`로 계획 작성 후 `superpowers:executing-plans`로 실행.
+- 신규 기능/버그 수정 구현: `superpowers:test-driven-development`.
+- 완료·수정·통과 주장 전: `superpowers:verification-before-completion` — 검증 명령 실제로 실행하고 출력 확인 후에만 주장.
+- 개발 브랜치 마무리 시: `superpowers:finishing-a-development-branch`.
