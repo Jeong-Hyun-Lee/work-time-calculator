@@ -20,7 +20,12 @@
 			</label>
 		</div>
 	</div>
-		<div class="picker-wrap" @wheel="handleInputWheel" @focusout="resyncInputText">
+		<div
+			class="picker-wrap"
+			@wheel="handleInputWheel"
+			@focusin="seedInputState"
+			@focusout="resyncInputText"
+		>
 			<VueDatePicker
 				v-model="timeModel"
 				time-picker
@@ -177,6 +182,18 @@ const adjustTime = (deltaMinutes) => {
 
 const menuInput = () => document.getElementById('start-time')
 
+// textInput을 켜면 라이브러리가 입력 텍스트 상태를 따로 들고 있다.
+// 사용자가 타이핑하기 전에는 그게 비어 있어서, blur나 메뉴 클릭처럼
+// 그 상태를 적용하는 경로에서 new Date()(현재 시각)로 폴백해 버린다.
+// 모델 값을 심어 두면 어느 경로로 가든 올바른 값이 나온다.
+const seedInputState = () => {
+	const input = menuInput()
+	if (!input) return
+
+	input.value = props.modelValue
+	input.dispatchEvent(new Event('input', { bubbles: true }))
+}
+
 // 입력 영역 위 스크롤. 포커스가 있을 때만 동작시켜,
 // 그냥 페이지를 넘기려던 스크롤이 시간을 바꿔버리는 일을 막는다
 const handleInputWheel = (event) => {
@@ -215,17 +232,9 @@ const bindMenu = (menuEl) => {
 		adjustTime(event.deltaY < 0 ? step : -step)
 	}
 
-	// textInput을 켜면 라이브러리가 입력 텍스트 상태를 따로 들고 있다.
-	// 타이핑을 안 했으면 그게 비어 있어 메뉴를 클릭하는 순간 "현재 시각"으로
-	// 리셋되고, 타이핑 중이면 무효한 중간값('10:2')을 제멋대로 해석해 둔다.
-	// 어느 쪽이든 클릭이 처리되기 전(capture 단계)에 모델 값을 다시 심는다.
-	const onMouseDownCapture = () => {
-		const input = menuInput()
-		if (!input) return
-
-		input.value = props.modelValue
-		input.dispatchEvent(new Event('input', { bubbles: true }))
-	}
+	// 타이핑 중이면 무효한 중간값('10:2')이 남아 있을 수 있으므로,
+	// 클릭이 처리되기 전(capture 단계)에 모델 값을 다시 심는다.
+	const onMouseDownCapture = () => seedInputState()
 
 	wheelTarget.addEventListener('wheel', onWheel, { passive: false })
 	menuEl.addEventListener('mousedown', onMouseDownCapture, true)
