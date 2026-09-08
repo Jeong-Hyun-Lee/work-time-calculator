@@ -270,6 +270,12 @@ onUnmounted(() => {
 	animation-delay: 0.36s;
 }
 
+/* 규칙이 없는 타일은 지연 0이 되어 맨 앞 카드와 같이 튀어나오므로,
+   그 뒤로 추가되는 타일은 모두 마지막 지연값을 쓰게 둔다 */
+.tile:nth-child(n + 11) .widget-card {
+	animation-delay: 0.4s;
+}
+
 @media (max-width: 1024px) {
 	.tile--2 {
 		grid-column: span 4;
