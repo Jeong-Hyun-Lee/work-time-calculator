@@ -46,6 +46,11 @@ export default {
 		empty: '룰렛을 돌려보세요',
 		spin: '룰렛 돌리기',
 	},
+	hoesik: {
+		title: '회식 메뉴 룰렛',
+		empty: '룰렛을 돌려보세요',
+		spin: '룰렛 돌리기',
+	},
 	ladder: {
 		title: '사다리타기',
 		namesAria: '참가자 이름',

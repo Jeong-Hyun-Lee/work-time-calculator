@@ -8,6 +8,7 @@ import CountdownDisplay from './components/CountdownDisplay.vue'
 import LottoWidget from './components/widgets/LottoWidget.vue'
 import QuoteWidget from './components/widgets/QuoteWidget.vue'
 import LunchRouletteWidget from './components/widgets/LunchRouletteWidget.vue'
+import HoesikRouletteWidget from './components/widgets/HoesikRouletteWidget.vue'
 import LadderWidget from './components/widgets/LadderWidget.vue'
 import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.vue'
 import { useTimeCalculation } from './composables/useTimeCalculation'
@@ -139,12 +140,18 @@ onUnmounted(() => {
 		<div class="tile tile--4">
 			<LunchRouletteWidget />
 		</div>
+		<!-- 회식 룰렛은 한국 전용이라 다른 로케일에서는 사다리타기가 이 자리로 올라와
+		     같은 줄을 12칸으로 채움 -->
+		<div v-if="isKoreaOnlyLocale(locale)" class="tile tile--4">
+			<HoesikRouletteWidget />
+		</div>
 		<div class="tile tile--4">
 			<LadderWidget />
 		</div>
 
-		<!-- 한국 4대보험·누진세율 기반이라 다른 로케일에서는 틀린 값이 됨 -->
-		<div v-if="isKoreaOnlyLocale(locale)" class="tile tile--12">
+		<!-- 한국 4대보험·누진세율 기반이라 다른 로케일에서는 틀린 값이 됨.
+		     회식 룰렛(4칸)과 합쳐 12칸이 되므로 로케일과 무관하게 빈 칸이 안 생김 -->
+		<div v-if="isKoreaOnlyLocale(locale)" class="tile tile--8">
 			<SalaryCalculatorWidget />
 		</div>
 	</main>
