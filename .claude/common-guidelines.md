@@ -12,6 +12,7 @@
 - **ponytail** — Ponytail 플러그인 지침 섹션. 마켓플레이스: GitHub `DietrichGebert/ponytail`.
 - **ecc** — 에이전트 팀 섹션의 `ecc:team-builder` 등. 마켓플레이스: `https://github.com/affaan-m/ECC.git`.
 - **claude-team-orchestration** — 에이전트 팀 섹션의 `swarm:team-management`/`swarm:orchestration-patterns`/`swarm:messaging`/`swarm:task-system`. 마켓플레이스: GitHub `zircote-plugins/claude-team-orchestration`. ⚠️ Agent Teams는 실험적 기능이라 기본 비활성 — `settings.json`에 `"env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" }` 추가하거나 환경변수 `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`로 export 필요.
+- **harness** — 하네스 엔지니어링 및 오케스트레이션 섹션. 마켓플레이스: GitHub `revfactory/harness`.
 - **superpowers** — Superpowers 플러그인 지침 섹션. 마켓플레이스: GitHub `obra/superpowers-marketplace`.
 
 ## 코딩 전에 생각하기
@@ -104,6 +105,7 @@
 - **실행 모드:**
   - 여러 에이전트가 동시에 독립적으로 실행될 수 있도록 **병렬 전문가(Parallel Specialists)** 또는 **스웜(Swarms)** 패턴을 우선 선택합니다.
   - 팀원 간 동기화를 위해 상호 JSON 메시징(`swarm:messaging`)과 공유 작업 큐(`swarm:task-system`)를 사용합니다.
+- **하네스 엔지니어링:** 오케스트레이션(멀티 에이전트 팀) 사용 시 `harness` 플러그인을 활용하여 하네스 구성, 모니터링, 최적화를 진행합니다. 팀 안정성 및 비용 효율성 관리를 위해 하네스 관련 기술을 적극 활용합니다.
 - **ECC 연동:** 맞춤형 에이전트 팀을 신속하게 빌드하기 위해 `ecc:team-builder` 설정 및 로컬 페르소나 마크다운 템플릿(`.md`)을 적극 활용합니다.
 - **최종 종합(Synthesis):** 팀 리더(Lead) 에이전트는 각 워커(Worker) 에이전트들의 병렬 분석 결과를 수집하고, 동의 사항(Agreements)과 충돌 사항(Tensions)을 요약한 최종 통합 보고서를 작성한 뒤 팀 세션을 안전하게 종료해야 합니다.
 
