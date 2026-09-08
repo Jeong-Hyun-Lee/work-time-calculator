@@ -53,7 +53,7 @@
 					format: parseTimeInput,
 					enterSubmit: true,
 					tabSubmit: true,
-					applyOnBlur: true,
+					applyOnBlur: false,
 					selectOnFocus: true,
 				}"
 				@menu-mounted="bindMenu"
