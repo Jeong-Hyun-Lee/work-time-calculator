@@ -247,6 +247,19 @@ html {
 	min-height: 100%;
 	background: var(--color-page-gradient);
 	background-repeat: no-repeat;
+	/* 더블탭 확대만 막음. 핀치 확대·스크롤은 그대로 둬서 접근성을 해치지 않는다
+	   (viewport의 user-scalable=no는 확대 자체를 봉쇄하므로 쓰지 않음) */
+	touch-action: manipulation;
+}
+
+/* iOS Safari는 html 한 곳만으로는 더블탭 확대가 남는 경우가 있어,
+   실제로 연타되는 대상에도 직접 걸어둔다 */
+button,
+input,
+select,
+textarea,
+label {
+	touch-action: manipulation;
 }
 
 body {
