@@ -1,13 +1,12 @@
 import { computed, ref } from 'vue'
 
+// 카드(라벨 + 시간) 비율에 가깝게 잡아야 창 안에 여백이 덜 남는다.
+// 요청 높이에서 창 제목줄 몫이 빠지므로 실제 표시 영역보다 크게 요청한다
 const PIP_WIDTH = 380
-const PIP_HEIGHT = 220
+const PIP_HEIGHT = 290
 
-// 카드를 이 설계 크기로 고정하고 transform으로만 늘리거나 줄인다.
-// 그래야 컨테이너가 어떤 비율이든 background-size: contain처럼 맞춰진다
-const FIT_WIDTH = 640
-const FIT_HEIGHT = 300
-const FIT_MARGIN = 0.92
+// 컨테이너를 꽉 채우되 여백은 조금 남긴다
+const FIT_MARGIN = 0.94
 
 // 헤더 버튼과 App.vue 그리드가 같은 상태를 봐야 하므로 모듈 스코프에 둔다
 const isFocusMode = ref(false)
@@ -20,13 +19,22 @@ const isPipSupported = () =>
 let fittedElement = null
 let fitView = null
 
-// transform: scale은 레이아웃 박스를 그대로 둬서 설계 크기만큼 스크롤이 생긴다.
+// transform: scale은 레이아웃 박스를 그대로 둬서 원본 크기만큼 스크롤이 생긴다.
 // zoom은 레이아웃까지 줄이므로 스크롤 없이 컨테이너에 맞는다
 const applyScale = () => {
 	if (!fittedElement || !fitView) return
+
+	// 배율을 뺀 상태에서 재야 콘텐츠의 자연 크기를 얻는다.
+	// 고정 설계 크기를 쓰면 언어마다 다른 문구 길이만큼 여백이 남는다
+	fittedElement.style.zoom = '1'
+	const natural = fittedElement.getBoundingClientRect()
+	if (!natural.width || !natural.height) return
+
 	const scale =
-		Math.min(fitView.innerWidth / FIT_WIDTH, fitView.innerHeight / FIT_HEIGHT) *
-		FIT_MARGIN
+		Math.min(
+			fitView.innerWidth / natural.width,
+			fitView.innerHeight / natural.height,
+		) * FIT_MARGIN
 	fittedElement.style.zoom = scale
 }
 
