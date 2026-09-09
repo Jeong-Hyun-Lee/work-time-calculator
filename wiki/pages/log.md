@@ -24,6 +24,13 @@ architecture.md에 위젯 허브 섹션을 추가하던 중, `redesign/mono-ui`�
 README.md의 "프로젝트 구조" 섹션은 여전히 테마 시스템(ThemeSelector.vue/useTheme.js/7종 테마)을 문서화하고 있고 위젯 허브 파일도 누락돼 있음 — 이번 범위 밖이라 후속 작업으로 남김.
 Updated: architecture.md.
 
+## [2026-09-09] ingest | vite-plugin-pwa로 PWA 전환
+`vite-plugin-pwa@1.3.0`(generateSW + autoUpdate) 도입. manifest·SW 생성·등록을 전부 플러그인에 넘기고 수동 `public/manifest.webmanifest`와 `public/service-worker.js`를 제거.
+알림 액션 버튼은 SW에서만 처리 가능하므로 `notificationclick` 로직을 `public/notification-sw.js`로 옮겨 `workbox.importScripts`로 합침. `useNotification.js`는 수동 SW 등록 대신 `navigator.serviceWorker.ready`를 쓰고, 매 알림마다 blob URL로 시계 SVG를 그리던 `createNotificationIcon()`(revoke 없이 누적되던 누수)을 지우고 앱 아이콘 `/icon-512.png`로 통일.
+아이콘 PNG(512, apple-touch 180)를 새로 생성하고, `index.html`이 참조하던 404 상태의 `/favicon.png`·`/apple-touch-icon.png` 드리프트도 해소.
+동기: Windows 토스트 헤더를 origin(`localhost:5173`)이 아니라 앱 이름·아이콘으로 띄우려면 설치형 PWA 신분이 필요하다는 점을 확인한 데서 출발.
+Updated: architecture.md.
+
 ## [2026-09-01] ingest | Google Analytics 4 연동
 `src/analytics.js` 추가 — gtag.js를 런타임에 동적 삽입, `src/main.js`에서 mount 전에 `initAnalytics()` 호출. Measurement ID는 클라이언트 번들에 노출되는 공개 값이라 env가 아닌 코드 상수(`GA_MEASUREMENT_ID`)로 둠. 상수가 비어있거나 개발 서버(`import.meta.env.PROD === false`)면 스크립트를 아예 로드하지 않아 로컬 트래픽이 통계에 섞이지 않음. 기본 page_view만 수집하고 커스텀 이벤트는 미구현.
 architecture.md의 잔여 드리프트도 함께 정리: 삭제된 `TimeCalculator.vue`/`TimeInfoCards.vue` 제거, 누락됐던 `StatTile.vue` 추가, 미사용 `useSEO.js` 표시.

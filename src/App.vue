@@ -14,10 +14,7 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 import { useTimeCalculation } from './composables/useTimeCalculation'
 import { useSEO } from './composables/useSEO'
 import { locale, isKoreaOnlyLocale, t } from './i18n'
-import {
-	registerServiceWorker,
-	useHourlyNotification,
-} from './composables/useNotification'
+import { useHourlyNotification } from './composables/useNotification'
 
 useSEO()
 
@@ -70,9 +67,6 @@ const calculateTimeWithNotification = () => {
 }
 
 onMounted(async () => {
-	// Service Worker 등록
-	await registerServiceWorker()
-
 	// useWebNotification을 사용하여 권한 요청
 	if (notification.isSupported.value && !notification.permissionGranted.value) {
 		if ('Notification' in window && Notification.permission === 'default') {

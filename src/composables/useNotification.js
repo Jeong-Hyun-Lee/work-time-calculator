@@ -1,116 +1,43 @@
 import { ref } from 'vue'
-import { useWebNotification } from '@vueuse/core'
 import { t } from '../i18n'
 
-let serviceWorkerRegistration = null
+// 앱 아이콘과 같은 것을 써서 토스트·설치 앱·파비콘의 브랜딩을 일치시킴
+const NOTIFICATION_ICON = '/icon-512.png'
+const NOTIFICATION_TAG = 'time-calculator'
 
-// Service Worker 등록 (useWebWorker는 Service Worker와 다르므로 기존 방식 유지)
-export const registerServiceWorker = async () => {
-	if ('serviceWorker' in navigator) {
-		try {
-			const registration = await navigator.serviceWorker.register(
-				'/service-worker.js',
-				{
-					scope: '/',
-				}
-			)
-			serviceWorkerRegistration = registration
-			console.log('Service Worker 등록 성공:', registration.scope)
-			return registration
-		} catch (error) {
-			console.error('Service Worker 등록 실패:', error)
-			return null
-		}
-	}
-	return null
-}
-
-// SVG 아이콘을 Data URL로 변환하여 사용
-export const createNotificationIcon = () => {
-	const svg = `
-		<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
-			<defs>
-				<linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-					<stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-					<stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-				</linearGradient>
-			</defs>
-			<circle cx="64" cy="64" r="60" fill="url(#grad)" stroke="#fff" stroke-width="4"/>
-			<circle cx="64" cy="64" r="4" fill="#fff"/>
-			<line x1="64" y1="64" x2="64" y2="40" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-			<line x1="64" y1="64" x2="84" y2="64" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-		</svg>
-	`
-	const blob = new Blob([svg], { type: 'image/svg+xml' })
-	return URL.createObjectURL(blob)
-}
-
-// 노티피케이션 전송
+// 알림 전송. 액션 버튼은 Service Worker 알림에서만 지원되므로 SW 경로를 우선한다
 export const sendNotification = async (message, options = {}) => {
-	const notificationIcon = options.icon || createNotificationIcon()
-	
-	// Service Worker를 통한 persistent notification 사용 (actions 지원)
-	if (
-		serviceWorkerRegistration &&
-		'showNotification' in serviceWorkerRegistration &&
-		options.actions &&
-		Array.isArray(options.actions)
-	) {
-		try {
-			await serviceWorkerRegistration.showNotification(t('notification.title'), {
-				body: message,
-				icon: notificationIcon,
-				badge: options.badge || notificationIcon,
-				tag: 'time-calculator',
-				requireInteraction: options.requireInteraction || false,
-				silent: false,
-				actions: options.actions,
-				...(options.image && { image: options.image }),
-				...(navigator.vibrate && { vibrate: [200, 100, 200] }),
-			})
-			return true
-		} catch (error) {
-			console.error('Service Worker Notification 실패:', error)
-			// Service Worker 실패 시 useWebNotification으로 폴백
-		}
+	if (!('Notification' in window)) return false
+
+	if (Notification.permission === 'default') {
+		await Notification.requestPermission()
+	}
+	if (Notification.permission !== 'granted') return false
+
+	const payload = {
+		body: message,
+		icon: NOTIFICATION_ICON,
+		badge: NOTIFICATION_ICON,
+		tag: NOTIFICATION_TAG,
+		renotify: true,
+		requireInteraction: options.requireInteraction ?? false,
+		...(options.actions && { actions: options.actions }),
 	}
 
-	// useWebNotification을 사용하여 알림 표시
-	const notification = useWebNotification({
-		title: t('notification.title'),
-		body: message,
-		icon: notificationIcon,
-		badge: options.badge || notificationIcon,
-		tag: 'time-calculator',
-		renotify: true,
-		requireInteraction: options.requireInteraction || false,
-		silent: false,
-		...(options.image && { image: options.image }),
-		...(navigator.vibrate && { vibrate: [200, 100, 200] }),
-	})
+	if ('serviceWorker' in navigator) {
+		// vite-plugin-pwa가 등록한 SW. ready는 활성화될 때까지 기다린다
+		const registration = await navigator.serviceWorker.ready
+		await registration.showNotification(t('notification.title'), payload)
+		return true
+	}
 
-	// 알림 클릭 이벤트
-	notification.onClick((event) => {
+	// SW를 못 쓰는 브라우저 폴백. 이 경로에서는 actions가 무시된다
+	const notification = new Notification(t('notification.title'), payload)
+	notification.onclick = () => {
 		window.focus()
 		notification.close()
-	})
-
-	// 알림 표시
-	if (notification.isSupported.value && notification.permissionGranted.value) {
-		notification.show()
-		return notification
-	} else if (notification.isSupported.value) {
-		// 권한이 없으면 요청
-		if ('Notification' in window && Notification.permission === 'default') {
-			const permission = await Notification.requestPermission()
-			if (permission === 'granted' && notification.permissionGranted.value) {
-				notification.show()
-				return notification
-			}
-		}
 	}
-
-	return null
+	return true
 }
 
 // 정시 알림 체크
@@ -133,7 +60,6 @@ export const useHourlyNotification = (hours, minutes, remainingSeconds, diffInSe
 		) {
 			notifiedHours.value.add(currentHours)
 
-			// 더 풍부한 알림 옵션
 			const emoji = currentHours === 1 ? '⏰' : currentHours <= 3 ? '⏳' : '🕐'
 			const message = t('notification.hoursLeft', {
 				emoji,
@@ -142,13 +68,7 @@ export const useHourlyNotification = (hours, minutes, remainingSeconds, diffInSe
 
 			await sendNotification(message, {
 				requireInteraction: currentHours <= 2, // 2시간 이하일 때는 상호작용 필요
-				actions: [
-					{
-						action: 'view',
-						title: t('notification.confirm'),
-						icon: createNotificationIcon(),
-					},
-				],
+				actions: [{ action: 'view', title: t('notification.confirm') }],
 			})
 		}
 	}
@@ -162,4 +82,3 @@ export const useHourlyNotification = (hours, minutes, remainingSeconds, diffInSe
 		resetNotifiedHours,
 	}
 }
-

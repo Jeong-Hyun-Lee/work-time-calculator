@@ -11,6 +11,8 @@ node_modules
 .DS_Store
 dist
 dist-ssr
+# vite-plugin-pwa가 dev 모드에서 만드는 Service Worker 산출물
+dev-dist
 coverage
 *.local
 
