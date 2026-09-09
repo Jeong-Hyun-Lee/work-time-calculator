@@ -12,11 +12,14 @@ import HoesikRouletteWidget from './components/widgets/HoesikRouletteWidget.vue'
 import LadderWidget from './components/widgets/LadderWidget.vue'
 import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.vue'
 import { useTimeCalculation } from './composables/useTimeCalculation'
+import { useOverlayMode } from './composables/useOverlayMode'
 import { useSEO } from './composables/useSEO'
 import { locale, isKoreaOnlyLocale, t } from './i18n'
 import { useHourlyNotification } from './composables/useNotification'
 
 useSEO()
+
+const { isFocusMode, toggle } = useOverlayMode()
 
 const startTime = useStorage('startTime', '09:55')
 const isHalfDay = useStorage('isHalfDay', false)
@@ -90,9 +93,14 @@ onUnmounted(() => {
 <template>
 	<div class="background-animation"></div>
 
-	<AppHeader />
+	<AppHeader v-if="!isFocusMode" />
 
-	<main class="tile-grid">
+	<!-- 집중 모드에서는 헤더를 숨기므로 나가는 길을 따로 둔다 (Esc로도 나갈 수 있음) -->
+	<button v-else type="button" class="overlay-exit" @click="toggle">
+		{{ $t('overlay.exit') }}
+	</button>
+
+	<main class="tile-grid" :class="{ 'is-focus-mode': isFocusMode }">
 		<div class="tile tile--4">
 			<TimeInput
 				v-model="startTime"
@@ -101,7 +109,7 @@ onUnmounted(() => {
 			/>
 		</div>
 
-		<div class="tile tile--8">
+		<div class="tile tile--8 tile--countdown">
 			<CountdownDisplay
 				:diff-in-seconds="diffInSeconds"
 				:hours="hours"
@@ -211,6 +219,48 @@ onUnmounted(() => {
 .tile {
 	display: flex;
 	flex-direction: column;
+}
+
+/* 집중 모드(PiP 미지원 폴백): 카운트다운만 남기고 화면 전체를 쓴다 */
+.tile-grid.is-focus-mode > .tile:not(.tile--countdown) {
+	display: none;
+}
+
+.tile-grid.is-focus-mode {
+	height: 100vh;
+	padding: 0;
+	overflow: hidden;
+	place-content: center;
+	justify-items: center;
+}
+
+.tile-grid.is-focus-mode > .tile--countdown {
+	grid-column: span 12;
+}
+
+.overlay-exit {
+	position: fixed;
+	top: var(--spacing-16);
+	right: var(--spacing-16);
+	z-index: 2;
+	padding: var(--spacing-8) var(--spacing-16);
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	border-radius: var(--radius-control);
+	background: rgba(255, 255, 255, 0.14);
+	color: #ffffff;
+	font-family: var(--font-sans);
+	font-size: var(--text-caption);
+	cursor: pointer;
+	backdrop-filter: blur(6px);
+}
+
+.overlay-exit:hover {
+	background: rgba(255, 255, 255, 0.24);
+}
+
+.overlay-exit:focus-visible {
+	outline: 2px solid #ffffff;
+	outline-offset: 2px;
 }
 
 .tile--2 {

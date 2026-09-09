@@ -17,6 +17,10 @@ export default {
 		increaseMinute: '出勤時間を{step}分進める',
 		decreaseMinute: '出勤時間を{step}分戻す',
 	},
+	overlay: {
+		enter: 'オーバーレイ',
+		exit: 'オーバーレイ終了',
+	},
 	countdown: {
 		label: '退勤までの残り時間',
 		overdueLabel: '残業時間',

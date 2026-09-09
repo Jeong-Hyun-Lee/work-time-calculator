@@ -17,6 +17,10 @@ export default {
 		increaseMinute: 'Increase start time by {step} minutes',
 		decreaseMinute: 'Decrease start time by {step} minutes',
 	},
+	overlay: {
+		enter: 'Overlay',
+		exit: 'Exit overlay',
+	},
 	countdown: {
 		label: 'Time until clock-out',
 		overdueLabel: 'Overtime so far',

@@ -17,6 +17,10 @@ export default {
 		increaseMinute: '上班时间增加 {step} 分钟',
 		decreaseMinute: '上班时间减少 {step} 分钟',
 	},
+	overlay: {
+		enter: '悬浮窗',
+		exit: '退出悬浮窗',
+	},
 	countdown: {
 		label: '距离下班还有',
 		overdueLabel: '已加班',

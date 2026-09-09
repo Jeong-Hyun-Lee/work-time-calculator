@@ -262,6 +262,20 @@ label {
 	touch-action: manipulation;
 }
 
+/* 오버레이·집중 모드에서 카운트다운을 컨테이너에 비율 유지로 맞춘다.
+   설계 크기를 고정하고 스케일만 조절하므로 스크롤이 생기지 않는다
+   (transform은 레이아웃을 안 바꿔서 background-size: contain과 같은 결과) */
+.countdown-section.is-fitted {
+	width: 640px;
+	height: 300px;
+	flex: none;
+}
+
+/* 집중 모드에서는 확대된 카드가 넘쳐도 스크롤바가 생기지 않게 한다 */
+body.is-overlay-open {
+	overflow: hidden;
+}
+
 body {
 	min-height: 100vh;
 	color: var(--color-ink);

@@ -6,6 +6,15 @@
 			</span>
 			<h1>{{ $t('app.title') }}</h1>
 			<p class="subtitle">{{ $t('app.subtitle') }}</p>
+			<button
+				type="button"
+				class="overlay-toggle"
+				:aria-pressed="isOverlayActive"
+				:title="isOverlayActive ? $t('overlay.exit') : $t('overlay.enter')"
+				@click="toggle"
+			>
+				{{ isOverlayActive ? $t('overlay.exit') : $t('overlay.enter') }}
+			</button>
 			<select
 				class="locale-select"
 				:value="locale"
@@ -28,6 +37,9 @@ import {
 	SUPPORTED_LOCALES,
 	LOCALE_LABELS,
 } from '../i18n'
+import { useOverlayMode } from '../composables/useOverlayMode'
+
+const { isOverlayActive, toggle } = useOverlayMode()
 </script>
 
 <style scoped>
@@ -84,6 +96,7 @@ h1 {
 	color: rgba(255, 255, 255, 0.8);
 }
 
+.overlay-toggle,
 .locale-select {
 	flex-shrink: 0;
 	padding: var(--spacing-4) var(--spacing-8);
@@ -96,13 +109,20 @@ h1 {
 	cursor: pointer;
 }
 
+.overlay-toggle:hover,
 .locale-select:hover {
 	background: rgba(255, 255, 255, 0.2);
 }
 
+.overlay-toggle:focus-visible,
 .locale-select:focus-visible {
 	outline: 2px solid #ffffff;
 	outline-offset: 2px;
+}
+
+.overlay-toggle[aria-pressed='true'] {
+	background: rgba(255, 255, 255, 0.28);
+	border-color: rgba(255, 255, 255, 0.6);
 }
 
 /* 드롭다운 목록은 브라우저가 그리므로 페이지 배경을 못 씀 */

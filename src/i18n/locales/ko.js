@@ -17,6 +17,10 @@ export default {
 		increaseMinute: '출근 시간 {step}분 늘리기',
 		decreaseMinute: '출근 시간 {step}분 줄이기',
 	},
+	overlay: {
+		enter: '오버레이',
+		exit: '오버레이 종료',
+	},
 	countdown: {
 		label: '퇴근기모리장단까지 남은 시간',
 		overdueLabel: '야근 시간 경과',
