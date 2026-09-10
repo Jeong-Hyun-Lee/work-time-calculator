@@ -6,6 +6,16 @@
 			</span>
 			<h1>{{ $t('app.title') }}</h1>
 			<p class="subtitle">{{ $t('app.subtitle') }}</p>
+			<!-- 권한을 아직 물어보지 않은 상태에서만 노출. 거부된 뒤에는 브라우저가
+			     재요청을 막으므로 버튼을 띄워도 아무 일도 일어나지 않는다 -->
+			<button
+				v-if="canRequest"
+				type="button"
+				class="overlay-toggle"
+				@click="request"
+			>
+				{{ $t('notification.enable') }}
+			</button>
 			<button
 				type="button"
 				class="overlay-toggle"
@@ -38,8 +48,10 @@ import {
 	LOCALE_LABELS,
 } from '../i18n'
 import { useOverlayMode } from '../composables/useOverlayMode'
+import { useNotificationPermission } from '../composables/useNotification'
 
 const { isOverlayActive, toggle } = useOverlayMode()
+const { canRequest, request } = useNotificationPermission()
 </script>
 
 <style scoped>

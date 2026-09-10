@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted } from 'vue'
-import { useStorage, useWebNotification } from '@vueuse/core'
+import { useStorage } from '@vueuse/core'
 import AppHeader from './components/AppHeader.vue'
 import TimeInput from './components/TimeInput.vue'
 import StatTile from './components/StatTile.vue'
@@ -14,7 +14,7 @@ import SalaryCalculatorWidget from './components/widgets/SalaryCalculatorWidget.
 import { useTimeCalculation } from './composables/useTimeCalculation'
 import { useOverlayMode } from './composables/useOverlayMode'
 import { useSEO } from './composables/useSEO'
-import { locale, isKoreaOnlyLocale, t } from './i18n'
+import { locale, isKoreaOnlyLocale } from './i18n'
 import { useHourlyNotification } from './composables/useNotification'
 
 useSEO()
@@ -48,12 +48,6 @@ const { checkHourlyNotification, resetNotifiedHours } = useHourlyNotification(
 	diffInSeconds,
 )
 
-// useWebNotification을 사용하여 권한 확인
-const notification = useWebNotification({
-	title: t('notification.title'),
-	body: '',
-})
-
 let intervalId = null
 
 // 출근 시간 변경 핸들러
@@ -69,14 +63,8 @@ const calculateTimeWithNotification = () => {
 	checkHourlyNotification()
 }
 
-onMounted(async () => {
-	// useWebNotification을 사용하여 권한 요청
-	if (notification.isSupported.value && !notification.permissionGranted.value) {
-		if ('Notification' in window && Notification.permission === 'default') {
-			await Notification.requestPermission()
-		}
-	}
-
+onMounted(() => {
+	// 알림 권한은 헤더의 "알림 켜기" 버튼에서만 요청한다 (사용자 제스처 필요)
 	calculateTimeWithNotification()
 	intervalId = setInterval(() => {
 		calculateTimeWithNotification()

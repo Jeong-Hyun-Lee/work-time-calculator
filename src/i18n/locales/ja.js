@@ -64,6 +64,7 @@ export default {
 		lose: 'ハズレ',
 	},
 	notification: {
+		enable: '通知をオンにする',
 		title: '退勤時間計算機',
 		hoursLeft: '{emoji} 退勤まであと{hours}時間です',
 		confirm: '確認',

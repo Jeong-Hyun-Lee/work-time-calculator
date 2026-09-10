@@ -64,6 +64,7 @@ export default {
 		lose: 'Miss',
 	},
 	notification: {
+		enable: 'Enable alerts',
 		title: 'Clock-Out Timer',
 		hoursLeft: '{emoji} {hours} hours left until clock-out!',
 		confirm: 'OK',

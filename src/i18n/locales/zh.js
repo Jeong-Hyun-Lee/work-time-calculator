@@ -64,6 +64,7 @@ export default {
 		lose: '未中',
 	},
 	notification: {
+		enable: '开启通知',
 		title: '下班时间计算器',
 		hoursLeft: '{emoji} 距离下班还有 {hours} 小时',
 		confirm: '确定',

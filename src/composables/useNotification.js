@@ -1,18 +1,45 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { t } from '../i18n'
 
 // 앱 아이콘과 같은 것을 써서 토스트·설치 앱·파비콘의 브랜딩을 일치시킴
 const NOTIFICATION_ICON = '/icon-512.png'
 const NOTIFICATION_TAG = 'time-calculator'
 
+const isSupported = typeof Notification !== 'undefined'
+const permission = ref(isSupported ? Notification.permission : 'denied')
+
+// 주소창이나 사이트 설정에서 사용자가 직접 바꿀 수도 있으니 그때도 상태를 맞춘다
+if (isSupported && navigator.permissions?.query) {
+	navigator.permissions
+		.query({ name: 'notifications' })
+		.then((status) => {
+			status.onchange = () => {
+				permission.value = Notification.permission
+			}
+		})
+		.catch(() => {})
+}
+
+// 브라우저는 사용자 제스처 없이 온 권한 요청을 조용히 무시하거나 거부한다.
+// 그래서 요청은 반드시 클릭 같은 상호작용에서만 한다
+export function useNotificationPermission() {
+	const request = async () => {
+		if (!isSupported) return
+		permission.value = await Notification.requestPermission()
+	}
+
+	return {
+		canRequest: computed(() => permission.value === 'default'),
+		isGranted: computed(() => permission.value === 'granted'),
+		request,
+	}
+}
+
 // 알림 전송. 액션 버튼은 Service Worker 알림에서만 지원되므로 SW 경로를 우선한다
 export const sendNotification = async (message, options = {}) => {
-	if (!('Notification' in window)) return false
-
-	if (Notification.permission === 'default') {
-		await Notification.requestPermission()
-	}
-	if (Notification.permission !== 'granted') return false
+	// 권한 요청은 사용자가 "알림 켜기"를 누를 때만 한다. 정시 타이머에서 요청하면
+	// 사용자 제스처가 없어 브라우저가 무시하거나 아예 차단해 버린다
+	if (!isSupported || Notification.permission !== 'granted') return false
 
 	const payload = {
 		body: message,

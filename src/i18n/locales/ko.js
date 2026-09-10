@@ -84,6 +84,7 @@ export default {
 			'2026년 요율 기준 참고용 계산이며(부양가족·비과세액·근로소득세액공제 미반영, 간이세액표 아닌 누진세율 근사), 실제 급여와 다를 수 있습니다.',
 	},
 	notification: {
+		enable: '알림 켜기',
 		title: '퇴근시간 계산기',
 		hoursLeft: '{emoji} 퇴근까지 {hours}시간 남았습니다!',
 		confirm: '확인',
