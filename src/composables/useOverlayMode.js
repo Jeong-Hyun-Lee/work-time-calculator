@@ -16,6 +16,7 @@ const pipWindow = ref(null)
 const isPipSupported = () =>
 	typeof window !== 'undefined' && 'documentPictureInPicture' in window
 
+let overlayCard = null
 let fittedElement = null
 let fitView = null
 
@@ -38,9 +39,13 @@ const applyScale = () => {
 	fittedElement.style.zoom = scale
 }
 
-const startFitting = (element, view) => {
+// card = 방해 요소를 숨길 카드, element = 배율을 걸 대상.
+// 집중 모드는 카드째로 키우고, PiP는 카드가 창을 꽉 채운 뒤 안쪽 콘텐츠만 키운다
+const startFitting = (card, element, view) => {
+	overlayCard = card
 	fittedElement = element
 	fitView = view
+	card.classList.add('is-overlay')
 	element.classList.add('is-fitted')
 	applyScale()
 	view.addEventListener('resize', applyScale)
@@ -49,8 +54,10 @@ const startFitting = (element, view) => {
 const stopFitting = () => {
 	if (!fittedElement) return
 	fitView?.removeEventListener('resize', applyScale)
+	overlayCard?.classList.remove('is-overlay')
 	fittedElement.classList.remove('is-fitted')
 	fittedElement.style.zoom = ''
+	overlayCard = null
 	fittedElement = null
 	fitView = null
 }
@@ -73,15 +80,26 @@ const copyStyles = (pip) => {
 		}
 	}
 
+	// 카드가 창을 꽉 채우게 해야 좌우에 빈 배경이 남지 않는다.
+	// Chrome이 정한 최소 창 크기 안에서 시간이 최대한 커지는 지점
 	const layout = pip.document.createElement('style')
 	layout.textContent = `
 		body {
 			margin: 0;
 			height: 100vh;
 			overflow: hidden;
-			display: grid;
-			place-items: center;
+			/* 카드를 붙이기 전 한 프레임 흰 배경이 보이지 않게 */
 			background: var(--color-page-gradient);
+		}
+
+		.countdown-section.is-overlay {
+			width: 100vw;
+			height: 100vh;
+			padding: 0;
+			border-radius: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 	`
 	pip.document.head.append(layout)
@@ -92,11 +110,12 @@ const onKeydown = (event) => {
 }
 
 const enterFocusMode = () => {
-	const countdown = document.querySelector('.countdown-section')
+	const card = document.querySelector('.countdown-section')
 	isFocusMode.value = true
 	document.body.classList.add('is-overlay-open')
 	window.addEventListener('keydown', onKeydown)
-	if (countdown) startFitting(countdown, window)
+	// 화면 전체가 컨테이너라 카드째로 키워도 여백이 남지 않는다
+	if (card) startFitting(card, card, window)
 }
 
 function exitFocusMode() {
@@ -109,8 +128,9 @@ function exitFocusMode() {
 // 카운트다운 DOM을 PiP 창으로 옮긴다. Vue는 같은 노드를 계속 패치하므로
 // 창 안에서도 시간이 갱신되고, 닫으면 원래 자리(주석 자리표)로 되돌린다
 const openPipWindow = async () => {
-	const countdown = document.querySelector('.countdown-section')
-	if (!countdown) return
+	const card = document.querySelector('.countdown-section')
+	const content = card?.querySelector('.countdown')
+	if (!card || !content) return
 
 	const pip = await window.documentPictureInPicture.requestWindow({
 		width: PIP_WIDTH,
@@ -120,14 +140,14 @@ const openPipWindow = async () => {
 	copyStyles(pip)
 
 	const placeholder = document.createComment('countdown-in-pip')
-	countdown.before(placeholder)
-	pip.document.body.append(countdown)
-	startFitting(countdown, pip)
+	card.before(placeholder)
+	pip.document.body.append(card)
+	startFitting(card, content, pip)
 	pipWindow.value = pip
 
 	pip.addEventListener('pagehide', () => {
 		stopFitting()
-		placeholder.replaceWith(countdown)
+		placeholder.replaceWith(card)
 		pipWindow.value = null
 	})
 }

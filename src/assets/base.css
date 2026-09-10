@@ -262,25 +262,31 @@ label {
 	touch-action: manipulation;
 }
 
-/* 오버레이·집중 모드: 카드를 콘텐츠에 딱 맞는 크기로 두고 배율(zoom)은 JS가
-   컨테이너 크기에 맞춰 계산한다. 여백이 남지 않아 시간이 최대로 커진다 */
-.countdown-section.is-fitted {
-	width: max-content;
-	height: auto;
-	flex: none;
-	padding: var(--spacing-12) var(--spacing-20);
+/* 오버레이는 시간만 보는 용도라, 흘끔 볼 때 방해되는 것은 뺀다 */
+.countdown-section.is-overlay .countdown-icon,
+.countdown-section.is-overlay .countdown-progress,
+.countdown-section.is-overlay .copy-btn {
+	display: none;
 }
 
 /* 줄바꿈이 생기면 자연 크기 측정이 흔들리므로 한 줄로 고정 */
-.countdown-section.is-fitted .countdown-label {
+.countdown-section.is-overlay .countdown-label {
 	white-space: nowrap;
 }
 
-/* 오버레이는 시간만 보는 용도라, 흘끔 볼 때 방해되는 것은 뺀다 */
-.countdown-section.is-fitted .countdown-icon,
-.countdown-section.is-fitted .countdown-progress,
-.countdown-section.is-fitted .copy-btn {
-	display: none;
+/* 집중 모드에서는 화면 전체가 컨테이너라 카드째로 키운다 */
+.countdown-section.is-overlay {
+	padding: var(--spacing-12) var(--spacing-20);
+}
+
+/* 배율(zoom) 대상. 콘텐츠에 딱 맞는 크기로 둬야 JS가 계산한 배율만큼
+   정확히 커지고 여백이 남지 않는다. PiP에서는 카드가 창을 채우고
+   이 클래스가 안쪽 콘텐츠에 붙는다 */
+.countdown-section.is-fitted,
+.countdown-section .countdown.is-fitted {
+	width: max-content;
+	height: auto;
+	flex: none;
 }
 
 /* 집중 모드에서는 확대된 카드가 넘쳐도 스크롤바가 생기지 않게 한다 */
