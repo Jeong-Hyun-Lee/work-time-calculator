@@ -16,50 +16,60 @@ const pipWindow = ref(null)
 const isPipSupported = () =>
 	typeof window !== 'undefined' && 'documentPictureInPicture' in window
 
-let overlayCard = null
 let fittedElement = null
 let fitView = null
+let contentObserver = null
+let currentScale = 1
 
 // transform: scale은 레이아웃 박스를 그대로 둬서 원본 크기만큼 스크롤이 생긴다.
 // zoom은 레이아웃까지 줄이므로 스크롤 없이 컨테이너에 맞는다
 const applyScale = () => {
 	if (!fittedElement || !fitView) return
 
-	// 배율을 뺀 상태에서 재야 콘텐츠의 자연 크기를 얻는다.
-	// 고정 설계 크기를 쓰면 언어마다 다른 문구 길이만큼 여백이 남는다
-	fittedElement.style.zoom = '1'
-	const natural = fittedElement.getBoundingClientRect()
-	if (!natural.width || !natural.height) return
+	// zoom을 1로 되돌려 재는 대신 현재 배율로 나눈다.
+	// 그래야 측정 때문에 레이아웃이 한 번 튀는 일이 없고,
+	// ResizeObserver가 자기 변경에 다시 반응하는 고리도 생기지 않는다
+	const rect = fittedElement.getBoundingClientRect()
+	if (!rect.width || !rect.height) return
 
-	const scale =
+	const naturalWidth = rect.width / currentScale
+	const naturalHeight = rect.height / currentScale
+	const next =
 		Math.min(
-			fitView.innerWidth / natural.width,
-			fitView.innerHeight / natural.height,
+			fitView.innerWidth / naturalWidth,
+			fitView.innerHeight / naturalHeight,
 		) * FIT_MARGIN
-	fittedElement.style.zoom = scale
+
+	if (Math.abs(next - currentScale) < 0.005) return
+
+	currentScale = next
+	fittedElement.style.zoom = next
 }
 
-// card = 방해 요소를 숨길 카드, element = 배율을 걸 대상.
-// 집중 모드는 카드째로 키우고, PiP는 카드가 창을 꽉 채운 뒤 안쪽 콘텐츠만 키운다
-const startFitting = (card, element, view) => {
-	overlayCard = card
+const startFitting = (element, view) => {
 	fittedElement = element
 	fitView = view
-	card.classList.add('is-overlay')
+	currentScale = 1
 	element.classList.add('is-fitted')
 	applyScale()
 	view.addEventListener('resize', applyScale)
+
+	// 남은 시간/야근 상태가 뒤바뀌거나 언어가 달라져 문구 길이가 변하면
+	// 자연 크기도 달라지므로 그때마다 다시 맞춘다
+	contentObserver = new view.ResizeObserver(() => applyScale())
+	contentObserver.observe(element)
 }
 
 const stopFitting = () => {
 	if (!fittedElement) return
+	contentObserver?.disconnect()
 	fitView?.removeEventListener('resize', applyScale)
-	overlayCard?.classList.remove('is-overlay')
 	fittedElement.classList.remove('is-fitted')
 	fittedElement.style.zoom = ''
-	overlayCard = null
+	contentObserver = null
 	fittedElement = null
 	fitView = null
+	currentScale = 1
 }
 
 // PiP 창은 별도 document라 페이지 스타일이 따라가지 않으므로 직접 옮긴다
@@ -110,12 +120,11 @@ const onKeydown = (event) => {
 }
 
 const enterFocusMode = () => {
-	const card = document.querySelector('.countdown-section')
+	const content = document.querySelector('.countdown-fit')
 	isFocusMode.value = true
 	document.body.classList.add('is-overlay-open')
 	window.addEventListener('keydown', onKeydown)
-	// 화면 전체가 컨테이너라 카드째로 키워도 여백이 남지 않는다
-	if (card) startFitting(card, card, window)
+	if (content) startFitting(content, window)
 }
 
 function exitFocusMode() {
@@ -129,7 +138,7 @@ function exitFocusMode() {
 // 창 안에서도 시간이 갱신되고, 닫으면 원래 자리(주석 자리표)로 되돌린다
 const openPipWindow = async () => {
 	const card = document.querySelector('.countdown-section')
-	const content = card?.querySelector('.countdown')
+	const content = card?.querySelector('.countdown-fit')
 	if (!card || !content) return
 
 	const pip = await window.documentPictureInPicture.requestWindow({
@@ -142,7 +151,7 @@ const openPipWindow = async () => {
 	const placeholder = document.createComment('countdown-in-pip')
 	card.before(placeholder)
 	pip.document.body.append(card)
-	startFitting(card, content, pip)
+	startFitting(content, pip)
 	pipWindow.value = pip
 
 	pip.addEventListener('pagehide', () => {

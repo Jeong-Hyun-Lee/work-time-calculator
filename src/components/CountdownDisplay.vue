@@ -1,5 +1,11 @@
 <template>
-	<div class="countdown-section widget-card widget-card--dark" :class="stateClass">
+	<div
+		class="countdown-section widget-card widget-card--dark"
+		:class="[stateClass, { 'is-overlay': isOverlayActive }]"
+	>
+		<!-- 오버레이 배율이 걸리는 자리. v-if 분기 밖에 둬야 남은 시간과 야근 상태가
+		     뒤바뀔 때 노드가 새로 만들어지며 배율이 사라지지 않는다 -->
+		<div class="countdown-fit">
 		<div v-if="diffInSeconds > 0" class="countdown">
 			<div class="countdown-icon">⏳</div>
 			<div class="countdown-label">{{ $t('countdown.label') }}</div>
@@ -72,12 +78,18 @@
 				<span class="copy-text">{{ justCopied ? $t('countdown.copied') : $t('countdown.copy') }}</span>
 			</button>
 		</div>
+		</div>
 	</div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useOverlayMode } from '../composables/useOverlayMode'
+
+// 오버레이 여부는 Vue가 class를 패치할 때 같이 실려야 한다.
+// JS로 직접 붙이면 stateClass가 바뀌는 순간 함께 지워짐
+const { isOverlayActive } = useOverlayMode()
 
 const justCopied = ref(false)
 let copyTimeout = null
@@ -168,6 +180,13 @@ const progress = computed(() => {
 	animation:
 		cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards,
 		glow 3s ease-in-out infinite;
+}
+
+.countdown-fit {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
 }
 
 .countdown {
