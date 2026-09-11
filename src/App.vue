@@ -23,6 +23,8 @@ const { isFocusMode, toggle } = useOverlayMode()
 
 const startTime = useStorage('startTime', '09:55')
 const isHalfDay = useStorage('isHalfDay', false)
+// 기존 하프데이 계산(4시간)을 그대로 두려면 기본값은 미포함
+const includesLunch = useStorage('includesLunch', false)
 
 const {
 	diffInSeconds,
@@ -36,7 +38,7 @@ const {
 	overdueMins,
 	overdueSecs,
 	calculateTime,
-} = useTimeCalculation(startTime, isHalfDay)
+} = useTimeCalculation(startTime, isHalfDay, includesLunch)
 
 // 첫 렌더에 diffInSeconds 기본값(0)으로 "야근 시간 경과"가 잠깐 보이는 것 방지
 calculateTime()
@@ -93,6 +95,7 @@ onUnmounted(() => {
 			<TimeInput
 				v-model="startTime"
 				v-model:isHalfDay="isHalfDay"
+				v-model:includesLunch="includesLunch"
 				@change="handleStartTimeChange"
 			/>
 		</div>

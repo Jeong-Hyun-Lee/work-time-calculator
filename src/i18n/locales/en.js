@@ -9,6 +9,7 @@ export default {
 		currentTime: 'Current time',
 		endTime: 'Clock-out time',
 		halfDay: 'Half day',
+		includeLunch: 'Include lunch (1h)',
 		// dayjs format string
 		format: 'HH:mm',
 		empty: '--:--',

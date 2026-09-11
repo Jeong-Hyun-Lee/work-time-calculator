@@ -9,6 +9,7 @@ export default {
 		currentTime: '현재 시간',
 		endTime: '퇴근 시간',
 		halfDay: '하프데이',
+		includeLunch: '점심시간 포함',
 		// dayjs 포맷 문자열
 		format: 'HH시 mm분',
 		empty: '--:--',

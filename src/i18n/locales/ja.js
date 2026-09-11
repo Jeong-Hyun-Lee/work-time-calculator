@@ -9,6 +9,7 @@ export default {
 		currentTime: '現在時刻',
 		endTime: '退勤時間',
 		halfDay: '半休',
+		includeLunch: '昼休みを含む（1時間）',
 		// dayjs フォーマット文字列
 		format: 'HH時mm分',
 		empty: '--:--',

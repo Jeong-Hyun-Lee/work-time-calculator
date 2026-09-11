@@ -9,6 +9,7 @@ export default {
 		currentTime: '当前时间',
 		endTime: '下班时间',
 		halfDay: '半天班',
+		includeLunch: '含午休（1小时）',
 		// dayjs 格式字符串
 		format: 'HH时mm分',
 		empty: '--:--',

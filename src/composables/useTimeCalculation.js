@@ -2,7 +2,12 @@ import { ref, computed } from 'vue'
 import dayjs from 'dayjs'
 import { t } from '../i18n'
 
-export function useTimeCalculation(startTime, isHalfDay) {
+const HALF_DAY_HOURS = 4
+// 8시간 근무 + 점심 1시간
+const FULL_DAY_HOURS = 9
+const LUNCH_HOURS = 1
+
+export function useTimeCalculation(startTime, isHalfDay, includesLunch) {
 	const currentTime = ref(dayjs())
 	const endTime = ref(null)
 	const diffInSeconds = ref(0)
@@ -75,8 +80,11 @@ export function useTimeCalculation(startTime, isHalfDay) {
 			.second(0)
 			.millisecond(0)
 
-		// 하프데이 체크박스가 체크되면 4시간, 아니면 8시간 (9시간은 1점심시간 포함)
-		const workHours = isHalfDay?.value ? 4 : 9
+		// 풀데이는 점심 1시간이 이미 포함된 9시간.
+		// 하프데이는 4시간이 기본이고, 점심을 끼고 쉬면 1시간을 더한다
+		const workHours = isHalfDay?.value
+			? HALF_DAY_HOURS + (includesLunch?.value ? LUNCH_HOURS : 0)
+			: FULL_DAY_HOURS
 		const end = start.add(workHours, 'hour')
 		endTime.value = end
 

@@ -18,6 +18,18 @@
 				</span>
 				<span class="checkbox-label-text">{{ $t('time.halfDay') }}</span>
 			</label>
+			<!-- 풀데이 9시간에는 점심 1시간이 이미 들어 있어, 하프데이일 때만 고를 일이 생긴다 -->
+			<label class="lunch-label" :class="{ disabled: !isHalfDay }">
+				<input
+					type="checkbox"
+					class="lunch-checkbox-input"
+					:checked="includesLunch"
+					:disabled="!isHalfDay"
+					@change="handleLunchChange"
+				/>
+				<span class="lunch-box"></span>
+				<span class="checkbox-label-text">{{ $t('time.includeLunch') }}</span>
+			</label>
 		</div>
 	</div>
 		<div
@@ -93,9 +105,18 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	includesLunch: {
+		type: Boolean,
+		default: false,
+	},
 })
 
-const emit = defineEmits(['update:modelValue', 'change', 'update:isHalfDay'])
+const emit = defineEmits([
+	'update:modelValue',
+	'change',
+	'update:isHalfDay',
+	'update:includesLunch',
+])
 
 const presets = ['08:00', '08:30', '09:00', '09:30', '10:00']
 
@@ -269,6 +290,11 @@ const handleHalfDayChange = (event) => {
 	emit('update:isHalfDay', event.target.checked)
 	emit('change', props.modelValue)
 }
+
+const handleLunchChange = (event) => {
+	emit('update:includesLunch', event.target.checked)
+	emit('change', props.modelValue)
+}
 </script>
 
 <style scoped>
@@ -387,7 +413,80 @@ const handleHalfDayChange = (event) => {
 }
 
 .halfday-checkbox-section {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-16);
 	margin: 0;
+}
+
+.lunch-label {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-8);
+	cursor: pointer;
+	user-select: none;
+	color: var(--color-ink);
+	font-weight: 600;
+	font-size: var(--text-body);
+	transition: opacity 0.2s ease;
+}
+
+/* 풀데이일 때는 고를 필요가 없는 옵션이라 흐리게 두고 클릭도 막는다 */
+.lunch-label.disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.lunch-checkbox-input {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.lunch-box {
+	position: relative;
+	width: 18px;
+	height: 18px;
+	border-radius: var(--radius-nested);
+	border: 1px solid var(--color-hairline);
+	background: var(--color-canvas);
+	transition:
+		background 0.2s ease,
+		border-color 0.2s ease;
+	flex-shrink: 0;
+}
+
+.lunch-label:not(.disabled):hover .lunch-box {
+	border-color: var(--color-ink-soft);
+}
+
+.lunch-checkbox-input:checked + .lunch-box {
+	background: var(--color-ink-soft);
+	border-color: var(--color-ink-soft);
+}
+
+/* 체크 표시는 두 변만 남긴 사각형을 회전시켜 그린다 */
+.lunch-checkbox-input:checked + .lunch-box::after {
+	content: '';
+	position: absolute;
+	top: 2px;
+	left: 5px;
+	width: 5px;
+	height: 9px;
+	border: solid var(--color-paper);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+.lunch-checkbox-input:focus-visible + .lunch-box {
+	outline: 2px solid var(--color-ink);
+	outline-offset: 2px;
 }
 
 .halfday-label {
